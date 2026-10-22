@@ -1,0 +1,330 @@
+{%- liquid
+  assign image = section.settings.image
+  assign image_position = section.settings.image_position | default: 'left'
+-%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+
+<section
+  class="mio-story section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }} spacing-style"
+  style="{% render 'spacing-style', settings: section.settings %}"
+>
+  <div class="mio-story__inner mio-story__inner--{{ image_position }}">
+    <div class="mio-story__media" data-mio-reveal="clip">
+      {%- if image != blank -%}
+        {{
+          image
+          | image_url: width: 1600
+          | image_tag:
+            widths: '480, 720, 960, 1200, 1600',
+            sizes: '(min-width: 990px) 56vw, 92vw',
+            class: 'mio-story__image',
+            loading: 'lazy',
+            alt: image.alt
+        }}
+      {%- else -%}
+        <div class="mio-story__placeholder">
+          {{ 'lifestyle-2' | placeholder_svg_tag: 'mio-story__placeholder-svg' }}
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="mio-story__content">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="mio-story__eyebrow" data-mio-reveal>
+          <span class="mio-story__eyebrow-line" aria-hidden="true"></span>
+          {{ section.settings.eyebrow }}
+        </p>
+      {%- endif -%}
+
+      {%- if section.settings.heading != blank -%}
+        <div class="mio-story__heading" data-mio-reveal style="--mio-delay: 60ms">
+          {{ section.settings.heading }}
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.text != blank -%}
+        <div class="mio-story__text rte" data-mio-reveal style="--mio-delay: 120ms">
+          {{ section.settings.text }}
+        </div>
+      {%- endif -%}
+
+      {%- if section.settings.link_label != blank -%}
+        <a
+          class="mio-story__link"
+          href="{{ section.settings.link | default: routes.all_products_collection_url }}"
+          data-mio-reveal
+          style="--mio-delay: 180ms"
+        >
+          {{ section.settings.link_label }}
+          <span class="mio-story__link-icon" aria-hidden="true">
+            {{- 'icon-arrow.svg' | inline_asset_content -}}
+          </span>
+        </a>
+      {%- endif -%}
+
+      {%- if section.settings.signature != blank -%}
+        <p class="mio-story__signature" data-mio-reveal style="--mio-delay: 220ms">
+          {{ section.settings.signature }}
+        </p>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .mio-story__inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 28px;
+    align-items: center;
+  }
+
+  .mio-story__media {
+    position: relative;
+    overflow: hidden;
+    border-radius: 4px;
+    background: rgb(var(--color-foreground-rgb) / 0.06);
+  }
+
+  .mio-story__image {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 4 / 5;
+    object-fit: cover;
+  }
+
+  .mio-story__placeholder {
+    display: grid;
+    place-items: center;
+    aspect-ratio: 4 / 5;
+    background: rgb(var(--color-foreground-rgb) / 0.04);
+  }
+
+  .mio-story__placeholder-svg {
+    width: 100%;
+    height: 100%;
+    opacity: 0.55;
+  }
+
+  .mio-story__content {
+    max-width: 560px;
+  }
+
+  .mio-story__eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin: 0 0 18px;
+    color: rgb(var(--color-foreground-rgb) / 0.62);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .mio-story__eyebrow-line {
+    width: 28px;
+    height: 2px;
+    background: var(--mio-yellow);
+  }
+
+  .mio-story__heading h2,
+  .mio-story__heading h3 {
+    margin: 0;
+    font-family: var(--font-heading--family);
+    font-weight: var(--font-heading--weight, 700);
+    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+    color: var(--color-foreground-heading);
+    text-wrap: balance;
+  }
+
+  .mio-story__heading em {
+    font-style: normal;
+    box-shadow: inset 0 -0.16em 0 var(--mio-yellow);
+  }
+
+  .mio-story__text {
+    max-width: 46ch;
+    margin-top: 24px;
+    color: rgb(var(--color-foreground-rgb) / 0.72);
+    font-size: 1rem;
+    line-height: 1.7;
+  }
+
+  .mio-story__text p {
+    margin: 0;
+  }
+
+  .mio-story__link {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    margin-top: 30px;
+    padding-bottom: 6px;
+    border-bottom: 1px solid currentColor;
+    color: var(--color-foreground);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .mio-story__link-icon {
+    display: inline-flex;
+    transition: transform 180ms var(--mio-ease-out);
+  }
+
+  .mio-story__link-icon svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .mio-story__signature {
+    margin: 34px 0 0;
+    color: rgb(var(--color-foreground-rgb) / 0.5);
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .mio-story.section--full-width .mio-story__inner {
+    padding-inline: var(--page-margin);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .mio-story__link:hover .mio-story__link-icon {
+      transform: translateX(4px);
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    .mio-story__inner {
+      grid-template-columns: 1.08fr 0.92fr;
+      gap: clamp(32px, 6vw, 80px);
+    }
+
+    .mio-story__inner--right .mio-story__media {
+      order: 2;
+    }
+
+    .mio-story__image,
+    .mio-story__placeholder {
+      aspect-ratio: 4 / 5;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Mio · Historia",
+  "class": "mio-story-wrapper",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Imagen",
+      "info": "Recomendado: 1200 × 1500 px. Si la dejas vacía se usa un marcador."
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Posición de la imagen",
+      "options": [
+        { "value": "left", "label": "Izquierda" },
+        { "value": "right", "label": "Derecha" }
+      ],
+      "default": "left"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Antetítulo",
+      "default": "Nuestra forma de elegir"
+    },
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Título",
+      "default": "<h2>Menos cosas.<br><em>Mejor elegidas.</em></h2>"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Texto",
+      "default": "<p>No llenamos la tienda de novedades que no necesitas. Probamos, comparamos y elegimos objetos que resuelven tu día a día y que valen lo que cuestan.</p>"
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Texto del enlace",
+      "default": "Conoce Mio Store"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Enlace"
+    },
+    {
+      "type": "text",
+      "id": "signature",
+      "label": "Firma o nota",
+      "default": "Mio Store · Colombia"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Esquema de color",
+      "default": "scheme-3"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Ancho",
+      "options": [
+        { "value": "page-width", "label": "Página" },
+        { "value": "full-width", "label": "Completo" }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "header",
+      "content": "Espaciado"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Arriba",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Abajo",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    }
+  ],
+  "presets": [
+    {
+      "name": "Mio · Historia",
+      "category": "Mio Store"
+    }
+  ]
+}
+{% endschema %}

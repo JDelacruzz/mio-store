@@ -5,6 +5,8 @@
 - [ ] Logo (SVG o PNG transparente) y favicon.
 - [ ] Nombre de tienda: **Mio Store** (Configuración → General).
 - [ ] Hero con imagen propia (1200 × 1500 px) o video vertical.
+- [ ] Imagen para `mio-story` (1200 × 1500 px) y dos imágenes para `mio-duo` (1400 × 1050 px).
+- [ ] Blog **Diario** con handle `diario` y al menos 3 artículos con imagen 4:3.
 - [ ] 3 colecciones con imagen 3:4 y al menos 6 productos cada una.
 - [ ] Reseñas reales con foto (reemplaza las de ejemplo del home).
 - [ ] Página **Envíos y entregas** (tiempos nacionales e importados).

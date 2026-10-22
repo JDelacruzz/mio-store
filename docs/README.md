@@ -44,9 +44,12 @@ sections/
   mio-marquee.liquid
   mio-trust-bar.liquid
   mio-collections.liquid
+  mio-story.liquid
+  mio-duo.liquid
   mio-offer.liquid
   mio-reviews.liquid
   mio-cod.liquid
+  mio-journal.liquid
   mio-faq.liquid
 ```
 
@@ -55,8 +58,11 @@ sections/
 - **Los JSON de plantillas son autogenerados.** `templates/index.json`, `templates/product.json`,
   `sections/header-group.json` y `sections/footer-group.json` pueden ser reescritos por el
   editor de temas. Si editas a mano, hazlo antes de tocar el editor y vuelve a revisar.
-- **Faltan assets reales.** El hero y las colecciones usan marcadores hasta que subas imágenes.
-  Formatos recomendados: hero 1200 × 1500 px, colecciones 3:4, reseñas avatar 96 × 96 px.
+- **Faltan assets reales.** El hero, `mio-story`, `mio-duo` y las colecciones usan marcadores
+  hasta que subas imágenes. Formatos recomendados: hero 1200 × 1500 px, historia 1200 × 1500 px,
+  duo 1400 × 1050 px, colecciones 3:4, reseñas avatar 96 × 96 px.
+- **Diario.** Crea un blog con handle `diario` y publica al menos 3 artículos para que
+  `mio-journal` aparezca en la tienda.
 - **Los textos legales no están incluidos.** Crea las páginas de privacidad, términos, envíos
   y devoluciones antes de publicar.
 - **Las apps no están instaladas.** El tema está preparado para ellas, pero la conexión con

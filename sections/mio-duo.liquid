@@ -1,0 +1,418 @@
+{%- liquid
+  assign section_link = section.settings.link | default: routes.all_products_collection_url
+-%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+
+<section
+  class="mio-duo section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }} spacing-style"
+  style="{% render 'spacing-style', settings: section.settings %}"
+>
+  {%- if section.settings.eyebrow != blank or section.settings.heading != blank or section.settings.link_label != blank -%}
+    <div class="mio-duo__header">
+      <div class="mio-duo__header-copy">
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="mio-duo__eyebrow">{{ section.settings.eyebrow }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="mio-duo__heading">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+      </div>
+      {%- if section.settings.link_label != blank -%}
+        <a class="mio-duo__header-link" href="{{ section_link }}">
+          {{ section.settings.link_label }}
+          <span aria-hidden="true">{{- 'icon-arrow.svg' | inline_asset_content -}}</span>
+        </a>
+      {%- endif -%}
+    </div>
+  {%- endif -%}
+
+  <div class="mio-duo__grid">
+    {%- for block in section.blocks -%}
+      {%- liquid
+        assign block_link = block.settings.link | default: routes.all_products_collection_url
+        assign image_alt = block.settings.image.alt | default: block.settings.heading
+      -%}
+      <div
+        class="mio-duo__card"
+        data-mio-reveal="fade"
+        style="--mio-delay: {{ forloop.index0 | times: 80 }}ms"
+        {{ block.shopify_attributes }}
+      >
+        <a class="mio-duo__link" href="{{ block_link }}">
+          <div class="mio-duo__media">
+            {%- if block.settings.image != blank -%}
+              {{
+                block.settings.image
+                | image_url: width: 1400
+                | image_tag:
+                  widths: '480, 720, 960, 1200, 1400',
+                  sizes: '(min-width: 990px) 46vw, 92vw',
+                  class: 'mio-duo__image',
+                  loading: 'lazy',
+                  alt: image_alt
+              }}
+            {%- else -%}
+              <div class="mio-duo__placeholder">
+                {{ 'lifestyle-1' | placeholder_svg_tag: 'mio-duo__placeholder-svg' }}
+              </div>
+            {%- endif -%}
+            <span class="mio-duo__scrim" aria-hidden="true"></span>
+            <span class="mio-duo__content">
+              {%- if block.settings.eyebrow != blank -%}
+                <span class="mio-duo__card-eyebrow">{{ block.settings.eyebrow }}</span>
+              {%- endif -%}
+              {%- if block.settings.heading != blank -%}
+                <span class="mio-duo__card-heading" role="heading" aria-level="3">{{ block.settings.heading }}</span>
+              {%- endif -%}
+              {%- if block.settings.link_label != blank -%}
+                <span class="mio-duo__cta">
+                  {{ block.settings.link_label }}
+                  <span class="mio-duo__cta-icon" aria-hidden="true">
+                    {{- 'icon-arrow.svg' | inline_asset_content -}}
+                  </span>
+                </span>
+              {%- endif -%}
+            </span>
+          </div>
+        </a>
+      </div>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .mio-duo__header {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    margin-bottom: 26px;
+  }
+
+  .mio-duo__eyebrow {
+    margin: 0 0 8px;
+    color: rgb(var(--color-foreground-rgb) / 0.6);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .mio-duo__heading {
+    margin: 0;
+    font-family: var(--font-heading--family);
+    font-weight: var(--font-heading--weight, 700);
+    font-size: clamp(2rem, 3.8vw, 3.5rem);
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  .mio-duo__header-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    align-self: flex-start;
+    padding-bottom: 5px;
+    border-bottom: 1px solid currentColor;
+    color: var(--color-foreground);
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    text-transform: uppercase;
+  }
+
+  .mio-duo__header-link svg {
+    width: 14px;
+    height: 14px;
+    transition: transform 180ms var(--mio-ease-out);
+  }
+
+  .mio-duo__grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+
+  .mio-duo__card {
+    min-width: 0;
+  }
+
+  .mio-duo__link {
+    position: relative;
+    display: block;
+    overflow: hidden;
+    border-radius: 4px;
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .mio-duo__media {
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    aspect-ratio: 4 / 5;
+    background: rgb(var(--color-foreground-rgb) / 0.08);
+  }
+
+  .mio-duo__image,
+  .mio-duo__placeholder-svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 700ms var(--mio-ease-out);
+  }
+
+  .mio-duo__placeholder {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    height: 100%;
+    background: rgb(var(--color-foreground-rgb) / 0.06);
+  }
+
+  .mio-duo__scrim {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    background: linear-gradient(
+      to top,
+      rgb(0 0 0 / 0.72) 0%,
+      rgb(0 0 0 / 0.28) 42%,
+      rgb(0 0 0 / 0) 70%
+    );
+    pointer-events: none;
+  }
+
+  .mio-duo__content {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 8px;
+    padding: 24px 22px;
+  }
+
+  .mio-duo__card-eyebrow {
+    color: var(--mio-yellow);
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+  }
+
+  .mio-duo__card-heading {
+    max-width: 18ch;
+    font-family: var(--font-heading--family);
+    font-size: clamp(1.65rem, 3vw, 2.6rem);
+    font-weight: var(--font-heading--weight, 700);
+    line-height: 1;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+
+  .mio-duo__cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 6px;
+    padding-bottom: 4px;
+    border-bottom: 1px solid rgb(255 255 255 / 0.7);
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+  }
+
+  .mio-duo__cta-icon {
+    display: inline-flex;
+    transition: transform 180ms var(--mio-ease-out);
+  }
+
+  .mio-duo__cta-icon svg {
+    width: 13px;
+    height: 13px;
+  }
+
+  .mio-duo.section--full-width .mio-duo__header,
+  .mio-duo.section--full-width .mio-duo__grid {
+    padding-inline: var(--page-margin);
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .mio-duo__header-link:hover svg,
+    .mio-duo__link:hover .mio-duo__cta-icon {
+      transform: translateX(4px);
+    }
+
+    .mio-duo__link:hover .mio-duo__image {
+      transform: scale(1.025);
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    .mio-duo__header {
+      flex-direction: row;
+      align-items: flex-end;
+      justify-content: space-between;
+      gap: 32px;
+    }
+
+    .mio-duo__header-link {
+      align-self: flex-end;
+      flex-shrink: 0;
+    }
+
+    .mio-duo__grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 20px;
+    }
+
+    .mio-duo__media {
+      aspect-ratio: 4 / 3;
+    }
+
+    .mio-duo__content {
+      padding: 30px 28px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Mio · Duo editorial",
+  "class": "mio-duo-wrapper",
+  "disabled_on": {
+    "groups": ["header", "footer"]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Antetítulo"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título"
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Texto del enlace"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Enlace"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Esquema de color",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Ancho",
+      "options": [
+        { "value": "page-width", "label": "Página" },
+        { "value": "full-width", "label": "Completo" }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "header",
+      "content": "Espaciado"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Arriba",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Abajo",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 32
+    }
+  ],
+  "blocks": [
+    {
+      "type": "mio_duo_card",
+      "name": "Tarjeta editorial",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Imagen",
+          "info": "Recomendado: 1400 × 1050 px."
+        },
+        {
+          "type": "text",
+          "id": "eyebrow",
+          "label": "Antetítulo",
+          "default": "Selección Mio"
+        },
+        {
+          "type": "text",
+          "id": "heading",
+          "label": "Título",
+          "default": "Esenciales"
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Texto del enlace",
+          "default": "Explorar"
+        },
+        {
+          "type": "url",
+          "id": "link",
+          "label": "Enlace"
+        }
+      ]
+    }
+  ],
+  "max_blocks": 2,
+  "presets": [
+    {
+      "name": "Mio · Duo editorial",
+      "category": "Mio Store",
+      "blocks": [
+        {
+          "type": "mio_duo_card",
+          "settings": {
+            "eyebrow": "Para empezar",
+            "heading": "Los esenciales",
+            "link_label": "Ver esenciales"
+          }
+        },
+        {
+          "type": "mio_duo_card",
+          "settings": {
+            "eyebrow": "Por tiempo limitado",
+            "heading": "Ofertas reales",
+            "link_label": "Ver ofertas"
+          }
+        }
+      ]
+    }
+  ]
+}
+{% endschema %}

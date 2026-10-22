@@ -40,12 +40,12 @@
         "chip_garantia"
       ],
       "settings": {
-        "eyebrow": "Envíos a todo Colombia",
-        "heading": "<h1>Compra fácil.<br><em>Recibe en casa.</em></h1>",
-        "subheading": "<p>Productos virales al mejor precio, con pago contra entrega y garantía de 30 días.</p>",
-        "primary_label": "Comprar ahora",
+        "eyebrow": "Hecho para Colombia",
+        "heading": "<h1>Lo esencial,<br><em>bien elegido.</em></h1>",
+        "subheading": "<p>Objetos que resuelven tu día a día, con envío nacional, pago contra entrega y 30 días de garantía.</p>",
+        "primary_label": "Explorar la colección",
         "primary_link": "shopify://collections/all",
-        "secondary_label": "Ver ofertas",
+        "secondary_label": "Ver más vendidos",
         "secondary_link": "/collections/all?sort_by=best-selling",
         "show_proof": true,
         "proof_text": "4.9/5 · +2.400 pedidos entregados",
@@ -190,6 +190,22 @@
         "section_width": "page-width",
         "padding-block-start": 48,
         "padding-block-end": 24
+      }
+    },
+    "mio_story": {
+      "type": "mio-story",
+      "settings": {
+        "image_position": "right",
+        "eyebrow": "Nuestra forma de elegir",
+        "heading": "<h2>Menos cosas.<br><em>Mejor elegidas.</em></h2>",
+        "text": "<p>No llenamos la tienda de novedades que no necesitas. Probamos, comparamos y elegimos objetos que resuelven tu día a día y que valen lo que cuestan.</p>",
+        "link_label": "Explorar la selección",
+        "link": "shopify://collections/all",
+        "signature": "Mio Store · Colombia",
+        "color_scheme": "scheme-3",
+        "section_width": "page-width",
+        "padding-block-start": 56,
+        "padding-block-end": 56
       }
     },
     "product_list_bestsellers": {
@@ -389,6 +405,39 @@
         "padding-block-end": 48
       }
     },
+    "mio_duo": {
+      "type": "mio-duo",
+      "blocks": {
+        "duo_esenciales": {
+          "type": "mio_duo_card",
+          "settings": {
+            "eyebrow": "Para empezar",
+            "heading": "Los esenciales",
+            "link_label": "Ver esenciales",
+            "link": "shopify://collections/all"
+          }
+        },
+        "duo_ofertas": {
+          "type": "mio_duo_card",
+          "settings": {
+            "eyebrow": "Por tiempo limitado",
+            "heading": "Ofertas reales",
+            "link_label": "Ver ofertas",
+            "link": "/collections/all?sort_by=best-selling"
+          }
+        }
+      },
+      "block_order": [
+        "duo_esenciales",
+        "duo_ofertas"
+      ],
+      "settings": {
+        "color_scheme": "scheme-3",
+        "section_width": "page-width",
+        "padding-block-start": 16,
+        "padding-block-end": 40
+      }
+    },
     "mio_offer": {
       "type": "mio-offer",
       "settings": {
@@ -505,6 +554,20 @@
         "padding-block-end": 48
       }
     },
+    "mio_journal": {
+      "type": "mio-journal",
+      "settings": {
+        "blog": "diario",
+        "eyebrow": "El diario de Mio",
+        "heading": "Historias para vivir mejor",
+        "link_label": "Ver el diario",
+        "link": "/blogs/diario",
+        "color_scheme": "scheme-1",
+        "section_width": "page-width",
+        "padding-block-start": 48,
+        "padding-block-end": 56
+      }
+    },
     "mio_faq": {
       "type": "mio-faq",
       "blocks": {
@@ -561,10 +624,13 @@
     "mio_marquee",
     "mio_trust",
     "mio_collections",
+    "mio_story",
     "product_list_bestsellers",
+    "mio_duo",
     "mio_offer",
     "mio_reviews",
     "mio_cod",
+    "mio_journal",
     "mio_faq"
   ]
 }

@@ -35,19 +35,36 @@ para mantener contraste. Esto se controla por esquema, no por sección.
 - Tracking negativo en títulos grandes (`-0.035em`), sin mayúsculas forzadas.
 - El hero usa `clamp()` para escalar de 40 px a 72 px según viewport.
 
+## Dirección editorial
+
+El home sigue un ritmo editorial inspirado en tiendas de marca como Taylor Stitch: fotografía
+grande, titulares amplios, mucho aire y bloques de historia entre los grids de producto. La
+adaptación es propia: conserva el amarillo, el blanco y los acentos colombianos de Mio Store, y
+no reutiliza imágenes, textos ni elementos de la marca de referencia.
+
 ## Estructura del home
 
 1. `mio-hero` — propuesta de valor + CTA + prueba social.
 2. `mio-marquee` — cinta de beneficios en movimiento constante.
 3. `mio-trust-bar` — 4 garantías con iconos.
 4. `mio-collections` — 3 categorías editoriales.
-5. `product-list` — más vendidos con carrusel en móvil.
-6. `mio-offer` — oferta con contador y código.
-7. `mio-reviews` — reseñas con foto y compra verificada.
-8. `mio-cod` — explicación del pago contra entrega en 3 pasos.
-9. `mio-faq` — dudas frecuentes + WhatsApp.
+5. `mio-story` — manifiesto de curaduría con imagen grande.
+6. `product-list` — más vendidos con carrusel en móvil.
+7. `mio-duo` — dos tarjetas editoriales (esenciales / ofertas).
+8. `mio-offer` — oferta con contador y código.
+9. `mio-reviews` — reseñas con foto y compra verificada.
+10. `mio-cod` — explicación del pago contra entrega en 3 pasos.
+11. `mio-journal` — últimos 3 artículos del blog (se oculta si el blog está vacío).
+12. `mio-faq` — dudas frecuentes + WhatsApp.
 
 Todas las secciones se pueden reordenar, ocultar o duplicar desde **Personalizar tema**.
+
+### Diario
+
+`mio-journal` usa un blog real de Shopify. Crea un blog con el handle `diario` (Contenido →
+Blog posts → Administrar blogs) y publica al menos 3 artículos con imagen destacada 4:3. Si el
+blog no existe o está vacío, la sección no se muestra en la tienda; en el editor se ven tarjetas
+de ejemplo.
 
 ## Movimiento
 
