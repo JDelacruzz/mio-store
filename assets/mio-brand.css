@@ -1,0 +1,212 @@
+/*
+  Mio Store — Capa de marca
+  -------------------------
+  Ajustes globales sobre el tema Horizon. No reemplaza el sistema de
+  esquemas de color: lo pule. Todo cambio visual importante se controla
+  desde Personalizar tema (colores, radios, tipografía).
+*/
+
+/* Tipografía y lectura ------------------------------------------------ */
+
+body {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+  overflow-x: clip;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  text-wrap: balance;
+}
+
+h1,
+h2 {
+  letter-spacing: -0.035em;
+}
+
+p {
+  text-wrap: pretty;
+}
+
+::selection {
+  background: var(--mio-yellow);
+  color: var(--mio-ink);
+}
+
+/* Anuncio superior ---------------------------------------------------- */
+
+.header-announcement,
+.header-announcements,
+announcement-bar-component {
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 600;
+  font-size: 0.6875rem;
+}
+
+/* Navegación: subrayado fino que crece desde la izquierda -------------- */
+
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .header-menu__link,
+  .menu-list__link,
+  .header__menu a {
+    position: relative;
+  }
+
+  .header-menu__link::after,
+  .menu-list__link::after,
+  .header__menu a::after {
+    content: '';
+    position: absolute;
+    inset-inline: 0;
+    inset-block-end: -3px;
+    height: 1.5px;
+    background: currentcolor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 240ms var(--mio-ease-out);
+    pointer-events: none;
+  }
+
+  .header-menu__link:hover::after,
+  .menu-list__link:hover::after,
+  .header__menu a:hover::after,
+  .header-menu__link[aria-expanded='true']::after {
+    transform: scaleX(1);
+  }
+}
+
+/* Fichas de producto -------------------------------------------------- */
+
+.product-card__content {
+  gap: var(--padding-xs);
+}
+
+.product-card .price {
+  font-weight: 600;
+}
+
+.price-item--sale,
+.price--sale .price {
+  color: var(--mio-red);
+}
+
+.compare-at-price,
+.price-item--regular.compare-at-price {
+  opacity: 0.55;
+  font-weight: 400;
+}
+
+.product-badges__badge {
+  font-size: 0.6875rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.35rem 0.65rem;
+}
+
+/* La galería recorta el zoom de hover sin desbordar la tarjeta. */
+.card-gallery,
+.product-card__image,
+.collection-card__image {
+  overflow: hidden;
+}
+
+.card-gallery img,
+.product-card__image img {
+  transition: transform 500ms var(--mio-ease-out);
+}
+
+/* Botón de compra rápida: legible sobre cualquier foto. */
+.quick-add__button,
+.quick-add-modal__button,
+.product-card__quick-add {
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+
+/* Formularios --------------------------------------------------------- */
+
+input,
+textarea,
+select {
+  transition:
+    border-color 180ms var(--mio-ease-out),
+    background-color 180ms var(--mio-ease-out),
+    box-shadow 180ms var(--mio-ease-out);
+}
+
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible {
+  border-color: var(--mio-blue);
+  box-shadow: 0 0 0 3px rgb(11 61 168 / 0.14);
+  outline: none;
+}
+
+/* Detalles y acordeones ------------------------------------------------- */
+
+details > summary {
+  cursor: pointer;
+  list-style: none;
+}
+
+details > summary::-webkit-details-marker {
+  display: none;
+}
+
+/* Enlaces del footer ---------------------------------------------------- */
+
+.footer a {
+  transition: opacity 160ms var(--mio-ease-out);
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .footer a:hover {
+    opacity: 0.65;
+  }
+}
+
+/* Estados de carga ------------------------------------------------------ */
+
+.mio-skeleton {
+  background: linear-gradient(
+    100deg,
+    rgb(var(--color-foreground-rgb) / 0.06) 20%,
+    rgb(var(--color-foreground-rgb) / 0.12) 40%,
+    rgb(var(--color-foreground-rgb) / 0.06) 60%
+  );
+  background-size: 220% 100%;
+  animation: mio-shimmer 1.4s linear infinite;
+}
+
+@keyframes mio-shimmer {
+  to {
+    background-position: -220% 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mio-skeleton {
+    animation: none;
+  }
+}
+
+/* Refuerzo mobile-first ------------------------------------------------- */
+
+@media screen and (max-width: 749px) {
+  .button,
+  .button-secondary {
+    min-height: 48px; /* área táctil cómoda */
+  }
+
+  /* iOS hace zoom en inputs < 16px; evitamos el salto. */
+  input,
+  select,
+  textarea {
+    font-size: max(16px, 1em);
+  }
+}

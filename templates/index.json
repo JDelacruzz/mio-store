@@ -1,0 +1,570 @@
+/*
+ * ------------------------------------------------------------
+ * IMPORTANT: The contents of this file are auto-generated.
+ *
+ * This file may be updated by the Shopify admin theme editor
+ * or related systems. Please exercise caution as any changes
+ * made to this file may be overwritten.
+ * ------------------------------------------------------------
+ */
+{
+  "sections": {
+    "mio_hero": {
+      "type": "mio-hero",
+      "blocks": {
+        "chip_cod": {
+          "type": "mio_chip",
+          "settings": {
+            "icon": "cash",
+            "label": "Pago contra entrega"
+          }
+        },
+        "chip_envio": {
+          "type": "mio_chip",
+          "settings": {
+            "icon": "truck",
+            "label": "Envío en 1-3 días"
+          }
+        },
+        "chip_garantia": {
+          "type": "mio_chip",
+          "settings": {
+            "icon": "shield",
+            "label": "Garantía 30 días"
+          }
+        }
+      },
+      "block_order": [
+        "chip_cod",
+        "chip_envio",
+        "chip_garantia"
+      ],
+      "settings": {
+        "eyebrow": "Envíos a todo Colombia",
+        "heading": "<h1>Compra fácil.<br><em>Recibe en casa.</em></h1>",
+        "subheading": "<p>Productos virales al mejor precio, con pago contra entrega y garantía de 30 días.</p>",
+        "primary_label": "Comprar ahora",
+        "primary_link": "shopify://collections/all",
+        "secondary_label": "Ver ofertas",
+        "secondary_link": "/collections/all?sort_by=best-selling",
+        "show_proof": true,
+        "proof_text": "4.9/5 · +2.400 pedidos entregados",
+        "color_scheme": "scheme-2",
+        "section_width": "page-width",
+        "padding-block-start": 40,
+        "padding-block-end": 40
+      }
+    },
+    "mio_marquee": {
+      "type": "mio-marquee",
+      "blocks": {
+        "item_1": {
+          "type": "mio_marquee_item",
+          "settings": {
+            "text": "Pago contra entrega",
+            "icon": "cash"
+          }
+        },
+        "item_2": {
+          "type": "mio_marquee_item",
+          "settings": {
+            "text": "Envío a todo Colombia",
+            "icon": "truck"
+          }
+        },
+        "item_3": {
+          "type": "mio_marquee_item",
+          "settings": {
+            "text": "Garantía de 30 días",
+            "icon": "shield"
+          }
+        },
+        "item_4": {
+          "type": "mio_marquee_item",
+          "settings": {
+            "text": "Atención por WhatsApp",
+            "icon": "whatsapp"
+          }
+        }
+      },
+      "block_order": [
+        "item_1",
+        "item_2",
+        "item_3",
+        "item_4"
+      ],
+      "settings": {
+        "color_scheme": "scheme-5",
+        "speed": 34,
+        "padding-block-start": 0,
+        "padding-block-end": 0
+      }
+    },
+    "mio_trust": {
+      "type": "mio-trust-bar",
+      "blocks": {
+        "b1": {
+          "type": "mio_benefit",
+          "settings": {
+            "icon": "cash",
+            "title": "Pago contra entrega",
+            "text": "Pagas al recibir"
+          }
+        },
+        "b2": {
+          "type": "mio_benefit",
+          "settings": {
+            "icon": "truck",
+            "title": "Envío nacional",
+            "text": "1 a 3 días hábiles"
+          }
+        },
+        "b3": {
+          "type": "mio_benefit",
+          "settings": {
+            "icon": "shield",
+            "title": "Compra protegida",
+            "text": "Garantía de 30 días"
+          }
+        },
+        "b4": {
+          "type": "mio_benefit",
+          "settings": {
+            "icon": "whatsapp",
+            "title": "Soporte real",
+            "text": "Respondemos en minutos"
+          }
+        }
+      },
+      "block_order": [
+        "b1",
+        "b2",
+        "b3",
+        "b4"
+      ],
+      "settings": {
+        "color_scheme": "scheme-1",
+        "section_width": "page-width",
+        "padding-block-start": 22,
+        "padding-block-end": 22
+      }
+    },
+    "mio_collections": {
+      "type": "mio-collections",
+      "blocks": {
+        "c1": {
+          "type": "mio_collection",
+          "settings": {
+            "title": "Tecnología",
+            "subtitle": "Ver productos",
+            "badge": "Más vendido"
+          }
+        },
+        "c2": {
+          "type": "mio_collection",
+          "settings": {
+            "title": "Hogar y cocina",
+            "subtitle": "Ver productos"
+          }
+        },
+        "c3": {
+          "type": "mio_collection",
+          "settings": {
+            "title": "Belleza y cuidado",
+            "subtitle": "Ver productos"
+          }
+        }
+      },
+      "block_order": [
+        "c1",
+        "c2",
+        "c3"
+      ],
+      "settings": {
+        "eyebrow": "Explora por categoría",
+        "heading": "Encuentra tu próximo favorito",
+        "subheading": "Selecciones pensadas para tu día a día, con envío a todo el país.",
+        "link_label": "Ver todo",
+        "link": "shopify://collections/all",
+        "color_scheme": "scheme-1",
+        "section_width": "page-width",
+        "padding-block-start": 48,
+        "padding-block-end": 24
+      }
+    },
+    "product_list_bestsellers": {
+      "type": "product-list",
+      "blocks": {
+        "static-header": {
+          "type": "_product-list-content",
+          "name": "t:names.header",
+          "static": true,
+          "settings": {
+            "content_direction": "row",
+            "vertical_on_mobile": false,
+            "horizontal_alignment": "space-between",
+            "vertical_alignment": "flex-end",
+            "align_baseline": true,
+            "horizontal_alignment_flex_direction_column": "flex-start",
+            "vertical_alignment_flex_direction_column": "center",
+            "gap": 12,
+            "width": "fill",
+            "custom_width": 100,
+            "width_mobile": "fill",
+            "custom_width_mobile": 100,
+            "height": "fit",
+            "custom_height": 100,
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "background_media": "none",
+            "video_position": "cover",
+            "background_image_position": "cover",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "product_list_text_title": {
+              "type": "_product-list-text",
+              "name": "t:names.collection_title",
+              "settings": {
+                "text": "<h2>Los más vendidos</h2><p>Los favoritos de nuestros clientes.</p>",
+                "width": "fit-content",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "rte",
+                "font": "var(--font-body--family)",
+                "font_size": "",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "color": "var(--color-foreground)",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "product_list_button_all": {
+              "type": "_product-list-button",
+              "name": "t:names.product_list_button",
+              "settings": {
+                "label": "Ver todo",
+                "open_in_new_tab": false,
+                "style_class": "link",
+                "width": "fit-content",
+                "custom_width": 100,
+                "width_mobile": "fit-content",
+                "custom_width_mobile": 100
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "product_list_text_title",
+            "product_list_button_all"
+          ]
+        },
+        "static-product-card": {
+          "type": "_product-card",
+          "name": "t:names.product_card",
+          "static": true,
+          "settings": {
+            "product_card_gap": 6,
+            "inherit_color_scheme": true,
+            "color_scheme": "",
+            "border": "none",
+            "border_width": 1,
+            "border_opacity": 100,
+            "border_radius": 0,
+            "padding-block-start": 0,
+            "padding-block-end": 0,
+            "padding-inline-start": 0,
+            "padding-inline-end": 0
+          },
+          "blocks": {
+            "product_card_gallery": {
+              "type": "_product-card-gallery",
+              "name": "t:names.product_card_media",
+              "settings": {
+                "image_ratio": "portrait",
+                "border": "none",
+                "border_width": 1,
+                "border_opacity": 100,
+                "border_radius": 12,
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "product_title": {
+              "type": "product-title",
+              "name": "t:names.product_title",
+              "settings": {
+                "width": "100%",
+                "max_width": "normal",
+                "alignment": "left",
+                "type_preset": "rte",
+                "font": "var(--font-body--family)",
+                "font_size": "0.875rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "wrap": "pretty",
+                "color": "var(--color-foreground)",
+                "background": false,
+                "background_color": "#00000026",
+                "corner_radius": 0,
+                "padding-block-start": 4,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            },
+            "price": {
+              "type": "price",
+              "name": "t:names.product_price",
+              "settings": {
+                "show_sale_price_first": true,
+                "show_installments": false,
+                "show_tax_info": false,
+                "type_preset": "h6",
+                "width": "100%",
+                "alignment": "left",
+                "font": "var(--font-body--family)",
+                "font_size": "1rem",
+                "line_height": "normal",
+                "letter_spacing": "normal",
+                "case": "none",
+                "color": "var(--color-foreground)",
+                "padding-block-start": 0,
+                "padding-block-end": 0,
+                "padding-inline-start": 0,
+                "padding-inline-end": 0
+              },
+              "blocks": {}
+            }
+          },
+          "block_order": [
+            "product_card_gallery",
+            "product_title",
+            "price"
+          ]
+        }
+      },
+      "block_order": [
+        "static-header"
+      ],
+      "name": "Los más vendidos",
+      "settings": {
+        "collection": "all",
+        "layout_type": "grid",
+        "carousel_on_mobile": true,
+        "max_products": 8,
+        "columns": 4,
+        "mobile_columns": "2",
+        "mobile_card_size": "60cqw",
+        "columns_gap": 10,
+        "rows_gap": 28,
+        "icons_style": "arrow",
+        "icons_shape": "none",
+        "section_width": "page-width",
+        "horizontal_alignment": "flex-start",
+        "gap": 24,
+        "color_scheme": "scheme-1",
+        "padding-block-start": 32,
+        "padding-block-end": 48
+      }
+    },
+    "mio_offer": {
+      "type": "mio-offer",
+      "settings": {
+        "eyebrow": "Oferta por tiempo limitado",
+        "heading": "Hasta 40% OFF solo hoy",
+        "text": "<p>Aprovecha antes de que se agoten. Envío contra entrega disponible en todo el país.</p>",
+        "code": "MIO10",
+        "end_date": "2026-12-31",
+        "button_label": "Aprovechar oferta",
+        "button_link": "shopify://collections/all",
+        "note": "Stock limitado · Aplica para pedidos contra entrega",
+        "color_scheme": "scheme-1",
+        "section_width": "page-width",
+        "padding-block-start": 20,
+        "padding-block-end": 20
+      }
+    },
+    "mio_reviews": {
+      "type": "mio-reviews",
+      "blocks": {
+        "r1": {
+          "type": "mio_review",
+          "settings": {
+            "rating": 5,
+            "quote": "Pedí un martes y el jueves ya lo tenía en casa. Todo llegó perfecto y pagué al recibir.",
+            "name": "Mariana G.",
+            "city": "Medellín",
+            "verified": true
+          }
+        },
+        "r2": {
+          "type": "mio_review",
+          "settings": {
+            "rating": 5,
+            "quote": "Me daba miedo comprar por internet, pero el pago contra entrega me dio confianza. Excelente.",
+            "name": "Andrés R.",
+            "city": "Bogotá",
+            "verified": true
+          }
+        },
+        "r3": {
+          "type": "mio_review",
+          "settings": {
+            "rating": 5,
+            "quote": "La atención por WhatsApp fue súper rápida. Ya voy por mi segunda compra en Mio Store.",
+            "name": "Valentina M.",
+            "city": "Cali",
+            "verified": true
+          }
+        }
+      },
+      "block_order": [
+        "r1",
+        "r2",
+        "r3"
+      ],
+      "settings": {
+        "eyebrow": "Clientes reales",
+        "heading": "Lo que dicen de Mio Store",
+        "subheading": "Miles de pedidos entregados en toda Colombia.",
+        "show_summary": true,
+        "average_rating": "4.9",
+        "review_count": "1.284",
+        "note": "Reseñas recopiladas después de la entrega del pedido.",
+        "color_scheme": "scheme-1",
+        "section_width": "page-width",
+        "padding-block-start": 48,
+        "padding-block-end": 48
+      }
+    },
+    "mio_cod": {
+      "type": "mio-cod",
+      "blocks": {
+        "s1": {
+          "type": "mio_step",
+          "settings": {
+            "title": "Elige tu producto",
+            "text": "Agrégalo al carrito y confirma tu dirección.",
+            "icon": "package"
+          }
+        },
+        "s2": {
+          "type": "mio_step",
+          "settings": {
+            "title": "Te contactamos para confirmar",
+            "text": "Te escribimos por WhatsApp el mismo día.",
+            "icon": "whatsapp"
+          }
+        },
+        "s3": {
+          "type": "mio_step",
+          "settings": {
+            "title": "Recibe y paga",
+            "text": "Pagas en efectivo cuando el pedido llega a tus manos.",
+            "icon": "cash"
+          }
+        }
+      },
+      "block_order": [
+        "s1",
+        "s2",
+        "s3"
+      ],
+      "settings": {
+        "eyebrow": "Cero riesgo",
+        "heading": "Paga solo cuando lo tengas en tus manos",
+        "text": "<p>Sin tarjetas, sin adelantos. Pides hoy y pagas contra entrega en tu casa u oficina.</p>",
+        "button_label": "Comprar contra entrega",
+        "button_link": "shopify://collections/all",
+        "note": "Disponible en las principales ciudades de Colombia. Aplican condiciones.",
+        "color_scheme": "scheme-2",
+        "section_width": "page-width",
+        "padding-block-start": 48,
+        "padding-block-end": 48
+      }
+    },
+    "mio_faq": {
+      "type": "mio-faq",
+      "blocks": {
+        "q1": {
+          "type": "mio_faq_item",
+          "settings": {
+            "question": "¿Puedo pagar contra entrega?",
+            "answer": "<p>Sí. Pagas en efectivo cuando recibes tu pedido en la puerta de tu casa u oficina, en las principales ciudades de Colombia.</p>"
+          }
+        },
+        "q2": {
+          "type": "mio_faq_item",
+          "settings": {
+            "question": "¿Cuánto tarda el envío?",
+            "answer": "<p>Entre 1 y 3 días hábiles para productos con envío nacional. Los productos importados tardan entre 10 y 20 días y siempre incluyen seguimiento.</p>"
+          }
+        },
+        "q3": {
+          "type": "mio_faq_item",
+          "settings": {
+            "question": "¿Cómo hago seguimiento a mi pedido?",
+            "answer": "<p>Te enviamos el número de guía por WhatsApp y correo en cuanto el pedido sale del proveedor.</p>"
+          }
+        },
+        "q4": {
+          "type": "mio_faq_item",
+          "settings": {
+            "question": "¿Qué pasa si mi producto llega defectuoso?",
+            "answer": "<p>Escríbenos dentro de los 30 días siguientes a la entrega. Te cambiamos el producto o te devolvemos el dinero.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4"
+      ],
+      "settings": {
+        "eyebrow": "Antes de comprar",
+        "heading": "Preguntas frecuentes",
+        "text": "<p>Resolvemos las dudas más comunes sobre envíos, pagos y garantías.</p>",
+        "whatsapp_label": "Hablar con un asesor",
+        "whatsapp_link": "",
+        "color_scheme": "scheme-3",
+        "section_width": "page-width",
+        "padding-block-start": 56,
+        "padding-block-end": 56
+      }
+    }
+  },
+  "order": [
+    "mio_hero",
+    "mio_marquee",
+    "mio_trust",
+    "mio_collections",
+    "product_list_bestsellers",
+    "mio_offer",
+    "mio_reviews",
+    "mio_cod",
+    "mio_faq"
+  ]
+}

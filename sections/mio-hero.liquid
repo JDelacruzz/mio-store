@@ -1,0 +1,607 @@
+{%- liquid
+  assign image = section.settings.image
+  assign has_image = false
+  if image != blank
+    assign has_image = true
+  endif
+
+  assign heading = section.settings.heading
+  assign primary_link = section.settings.primary_link | default: routes.all_products_collection_url
+  assign secondary_link = section.settings.secondary_link
+-%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+
+<section
+  class="mio-hero section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }} spacing-style"
+  style="{% render 'spacing-style', settings: section.settings %}"
+  data-mio-hero
+  aria-labelledby="MioHeroTitle-{{ section.id }}"
+>
+  <div class="mio-hero__inner">
+    <div class="mio-hero__media" data-mio-hero-media>
+      <div class="mio-hero__media-frame">
+        {%- if has_image -%}
+          {{
+            image
+            | image_url: width: 1600
+            | image_tag:
+              widths: '416, 600, 800, 1000, 1200, 1600',
+              sizes: '(min-width: 990px) 46vw, (min-width: 750px) 50vw, 92vw',
+              class: 'mio-hero__image',
+              loading: 'eager',
+              fetchpriority: 'high',
+              alt: image.alt,
+              data-mio-parallax: '0.05'
+          }}
+        {%- else -%}
+          <div class="mio-hero__placeholder">
+            {{ 'lifestyle-1' | placeholder_svg_tag: 'mio-hero__placeholder-svg' }}
+          </div>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.show_proof -%}
+        <div class="mio-hero__proof" data-mio-hero-item style="--mio-hero-index: 4">
+          <div class="mio-hero__stars" aria-hidden="true">
+            {%- for i in (1..5) -%}
+              {% render 'mio-icons', icon: 'star', size: 13 %}
+            {%- endfor -%}
+          </div>
+          <p class="mio-hero__proof-text">{{ section.settings.proof_text }}</p>
+        </div>
+      {%- endif -%}
+    </div>
+
+    <div class="mio-hero__content">
+      {%- if section.settings.eyebrow != blank -%}
+        <p class="mio-hero__eyebrow" data-mio-hero-item style="--mio-hero-index: 0">
+          <span class="mio-hero__flag" aria-hidden="true">
+            <span></span><span></span><span></span>
+          </span>
+          {{ section.settings.eyebrow }}
+        </p>
+      {%- endif -%}
+
+      <div class="mio-hero__heading" id="MioHeroTitle-{{ section.id }}" data-mio-hero-item style="--mio-hero-index: 1">
+        {{ heading }}
+      </div>
+
+      {%- if section.settings.subheading != blank -%}
+        <div class="mio-hero__subheading rte" data-mio-hero-item style="--mio-hero-index: 2">
+          {{ section.settings.subheading }}
+        </div>
+      {%- endif -%}
+
+      <div class="mio-hero__actions" data-mio-hero-item style="--mio-hero-index: 3">
+        <a class="button mio-hero__cta" href="{{ primary_link }}">
+          {{ section.settings.primary_label }}
+          <span class="mio-hero__cta-icon" aria-hidden="true">
+            {{- 'icon-arrow.svg' | inline_asset_content -}}
+          </span>
+        </a>
+
+        {%- if section.settings.secondary_label != blank and secondary_link != blank -%}
+          <a class="button-secondary mio-hero__cta-secondary" href="{{ secondary_link }}">
+            {{ section.settings.secondary_label }}
+          </a>
+        {%- endif -%}
+      </div>
+
+      {%- if section.blocks.size > 0 -%}
+        <ul class="mio-hero__chips" role="list" data-mio-hero-item style="--mio-hero-index: 5">
+          {%- for block in section.blocks -%}
+            <li class="mio-hero__chip" {{ block.shopify_attributes }}>
+              {% render 'mio-icons', icon: block.settings.icon, size: 17 %}
+              <span>{{ block.settings.label }}</span>
+            </li>
+          {%- endfor -%}
+        </ul>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .mio-hero {
+    --mio-hero-radius: 28px;
+    overflow: clip;
+  }
+
+  .mio-hero__inner {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 28px;
+    align-items: center;
+  }
+
+  .mio-hero__media {
+    position: relative;
+    order: -1;
+  }
+
+  .mio-hero__media-frame {
+    position: relative;
+    border-radius: var(--mio-hero-radius);
+    overflow: hidden;
+    background: rgb(255 255 255 / 0.45);
+    aspect-ratio: 4 / 5;
+    max-height: 62svh;
+    box-shadow: 0 1px 0 rgb(16 16 20 / 0.06);
+  }
+
+  .mio-hero__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transform-origin: center;
+  }
+
+  .mio-hero__placeholder {
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    color: rgb(16 16 20 / 0.18);
+  }
+
+  .mio-hero__placeholder-svg {
+    width: 60%;
+    height: auto;
+  }
+
+  .mio-hero__proof {
+    position: absolute;
+    inset-inline-start: 12px;
+    inset-block-end: 12px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 8px 14px;
+    border-radius: 100px;
+    background: rgb(255 255 255 / 0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    color: var(--mio-ink);
+    box-shadow: 0 6px 18px rgb(16 16 20 / 0.12);
+  }
+
+  .mio-hero__stars {
+    display: inline-flex;
+    gap: 1px;
+    color: #f5a623;
+  }
+
+  .mio-hero__proof-text {
+    margin: 0;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+  }
+
+  .mio-hero__content {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 18px;
+  }
+
+  .mio-hero__eyebrow {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0;
+    padding: 7px 12px;
+    border-radius: 100px;
+    background: rgb(255 255 255 / 0.55);
+    font-size: 0.75rem;
+    font-weight: 600;
+    letter-spacing: 0.01em;
+  }
+
+  .mio-hero__flag {
+    display: inline-flex;
+    flex-direction: column;
+    width: 14px;
+    height: 10px;
+    border-radius: 2px;
+    overflow: hidden;
+    box-shadow: inset 0 0 0 1px rgb(16 16 20 / 0.08);
+  }
+
+  .mio-hero__flag span {
+    flex: 1;
+  }
+
+  .mio-hero__flag span:nth-child(1) {
+    background: #fcd116;
+  }
+
+  .mio-hero__flag span:nth-child(2) {
+    background: #003893;
+  }
+
+  .mio-hero__flag span:nth-child(3) {
+    background: #ce1126;
+  }
+
+  .mio-hero__heading h1,
+  .mio-hero__heading h2,
+  .mio-hero__heading p {
+    margin: 0;
+    font-family: var(--font-heading--family);
+    font-weight: var(--font-heading--weight, 700);
+    font-size: clamp(2.5rem, 6.2vw, 4.5rem);
+    line-height: 0.98;
+    letter-spacing: -0.045em;
+    color: var(--color-foreground-heading);
+    text-wrap: balance;
+  }
+
+  .mio-hero__heading em {
+    font-style: normal;
+    text-decoration: underline;
+    text-decoration-color: var(--mio-red);
+    text-decoration-thickness: 0.055em;
+    text-underline-offset: 0.1em;
+    text-decoration-skip-ink: none;
+  }
+
+  .mio-hero__subheading {
+    max-width: 34ch;
+    font-size: 1rem;
+    line-height: 1.55;
+    color: rgb(var(--color-foreground-rgb) / 0.78);
+  }
+
+  .mio-hero__subheading p {
+    margin: 0;
+  }
+
+  .mio-hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 10px;
+    width: 100%;
+    padding-block-start: 4px;
+  }
+
+  .mio-hero__cta,
+  .mio-hero__cta-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 52px;
+    padding-inline: 26px;
+    font-size: 0.9375rem;
+    font-weight: 600;
+  }
+
+  /* CTA principal en rojo bandera, incluso sobre el fondo amarillo. */
+  .mio-hero .mio-hero__cta {
+    background: var(--mio-red);
+    border-color: var(--mio-red);
+    color: #fff;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .mio-hero .mio-hero__cta:hover {
+      background: #b31f1f;
+      border-color: #b31f1f;
+      color: #fff;
+    }
+  }
+
+  .mio-hero__cta-icon {
+    display: inline-flex;
+    width: 18px;
+    height: 18px;
+    transition: transform 220ms var(--mio-ease-out);
+  }
+
+  .mio-hero__cta-icon svg {
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .mio-hero__cta:hover .mio-hero__cta-icon {
+      transform: translateX(3px);
+    }
+  }
+
+  .mio-hero__chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 6px 0 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .mio-hero__chip {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 6px 11px;
+    border-radius: 100px;
+    border: 1px solid rgb(16 16 20 / 0.12);
+    font-size: 0.75rem;
+    font-weight: 500;
+    color: var(--color-foreground-heading);
+    background: rgb(255 255 255 / 0.35);
+  }
+
+  @media screen and (max-width: 749px) {
+    .mio-hero__media-frame {
+      aspect-ratio: 4 / 4.4;
+      max-height: 54svh;
+      border-radius: 20px;
+    }
+
+    .mio-hero__actions {
+      flex-direction: column;
+      align-items: stretch;
+    }
+
+    .mio-hero__cta,
+    .mio-hero__cta-secondary {
+      width: 100%;
+    }
+
+    .mio-hero__proof {
+      inset-inline-start: 8px;
+      inset-block-end: 8px;
+      padding: 7px 11px;
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    .mio-hero__inner {
+      grid-template-columns: 1fr;
+      gap: 36px;
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .mio-hero__inner {
+      grid-template-columns: 0.92fr 1.08fr;
+      gap: clamp(32px, 5vw, 72px);
+    }
+
+    .mio-hero__media {
+      order: 0;
+    }
+
+    .mio-hero__media-frame {
+      aspect-ratio: 5 / 5.6;
+      max-height: 72svh;
+    }
+
+    .mio-hero__content {
+      gap: 22px;
+      padding-block: 24px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Mio · Hero",
+  "class": "mio-hero-wrapper",
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer"
+    ]
+  },
+  "settings": [
+    {
+      "type": "header",
+      "content": "Contenido"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Antetítulo",
+      "default": "Envíos a todo Colombia"
+    },
+    {
+      "type": "richtext",
+      "id": "heading",
+      "label": "Titular",
+      "default": "<h1>Compra fácil.<br><em>Recibe en casa.</em></h1>"
+    },
+    {
+      "type": "richtext",
+      "id": "subheading",
+      "label": "Subtítulo",
+      "default": "<p>Productos virales al mejor precio, con pago contra entrega y garantía de 30 días.</p>"
+    },
+    {
+      "type": "text",
+      "id": "primary_label",
+      "label": "Botón principal",
+      "default": "Comprar ahora"
+    },
+    {
+      "type": "url",
+      "id": "primary_link",
+      "label": "Enlace del botón principal"
+    },
+    {
+      "type": "text",
+      "id": "secondary_label",
+      "label": "Botón secundario",
+      "default": "Ver catálogo"
+    },
+    {
+      "type": "url",
+      "id": "secondary_link",
+      "label": "Enlace del botón secundario"
+    },
+    {
+      "type": "header",
+      "content": "Imagen"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Imagen principal",
+      "info": "Recomendado: 1200 × 1500 px. Si la dejas vacía se usa un marcador."
+    },
+    {
+      "type": "header",
+      "content": "Prueba social"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_proof",
+      "label": "Mostrar calificación flotante",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "proof_text",
+      "label": "Texto de prueba social",
+      "default": "4.9/5 · +2.400 pedidos entregados"
+    },
+    {
+      "type": "header",
+      "content": "Apariencia"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Esquema de color",
+      "default": "scheme-2"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Ancho",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Página"
+        },
+        {
+          "value": "full-width",
+          "label": "Completo"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "header",
+      "content": "Espaciado"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Arriba",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Abajo",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 40
+    }
+  ],
+  "blocks": [
+    {
+      "type": "mio_chip",
+      "name": "Insignia",
+      "limit": 4,
+      "settings": [
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icono",
+          "options": [
+            {
+              "value": "truck",
+              "label": "Envío"
+            },
+            {
+              "value": "cash",
+              "label": "Contra entrega"
+            },
+            {
+              "value": "shield",
+              "label": "Garantía"
+            },
+            {
+              "value": "whatsapp",
+              "label": "WhatsApp"
+            },
+            {
+              "value": "return",
+              "label": "Devoluciones"
+            },
+            {
+              "value": "spark",
+              "label": "Novedad"
+            }
+          ],
+          "default": "cash"
+        },
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Texto",
+          "default": "Pago contra entrega"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Mio · Hero",
+      "category": "Mio Store",
+      "blocks": {
+        "chip_1": {
+          "type": "mio_chip",
+          "settings": {
+            "icon": "cash",
+            "label": "Pago contra entrega"
+          }
+        },
+        "chip_2": {
+          "type": "mio_chip",
+          "settings": {
+            "icon": "truck",
+            "label": "Envío en 1-3 días"
+          }
+        },
+        "chip_3": {
+          "type": "mio_chip",
+          "settings": {
+            "icon": "shield",
+            "label": "Garantía 30 días"
+          }
+        }
+      },
+      "block_order": [
+        "chip_1",
+        "chip_2",
+        "chip_3"
+      ]
+    }
+  ]
+}
+{% endschema %}

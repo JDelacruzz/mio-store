@@ -1,0 +1,464 @@
+{%- if section.blocks.size > 0 -%}
+  <div class="section-background color-{{ section.settings.color_scheme }}"></div>
+
+  <section
+    class="mio-reviews section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }} spacing-style"
+    style="{% render 'spacing-style', settings: section.settings %}"
+  >
+    <header class="mio-reviews__header" data-mio-reveal>
+      <div>
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="mio-reviews__eyebrow">{{ section.settings.eyebrow }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="mio-reviews__title">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.subheading != blank -%}
+          <p class="mio-reviews__subheading">{{ section.settings.subheading }}</p>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.show_summary -%}
+        <div class="mio-reviews__summary">
+          <div class="mio-reviews__summary-stars" aria-hidden="true">
+            {%- for i in (1..5) -%}
+              {% render 'mio-icons', icon: 'star', size: 15 %}
+            {%- endfor -%}
+          </div>
+          <p>
+            <strong>{{ section.settings.average_rating }}</strong>
+            <span>de 5 · {{ section.settings.review_count }} reseñas</span>
+          </p>
+        </div>
+      {%- endif -%}
+    </header>
+
+    <div class="mio-reviews__grid" data-mio-stagger="80">
+      {%- for block in section.blocks -%}
+        <figure class="mio-review" data-mio-reveal {{ block.shopify_attributes }}>
+          <div class="mio-review__rating" aria-label="{{ block.settings.rating }} de 5 estrellas">
+            {%- for i in (1..5) -%}
+              <span class="{% if i > block.settings.rating %}mio-review__star--empty{% endif %}">
+                {% render 'mio-icons', icon: 'star', size: 14 %}
+              </span>
+            {%- endfor -%}
+          </div>
+
+          <blockquote class="mio-review__quote">
+            {{ block.settings.quote }}
+          </blockquote>
+
+          <footer class="mio-review__footer">
+            {%- if block.settings.image != blank -%}
+              {{
+                block.settings.image
+                | image_url: width: 96
+                | image_tag:
+                  widths: '48, 96',
+                  sizes: '44px',
+                  class: 'mio-review__avatar',
+                  loading: 'lazy',
+                  alt: block.settings.name
+              }}
+            {%- else -%}
+              <span class="mio-review__avatar mio-review__avatar--initials" aria-hidden="true">
+                {{ block.settings.name | slice: 0 | upcase }}
+              </span>
+            {%- endif -%}
+
+            <div class="mio-review__author">
+              <strong>{{ block.settings.name }}</strong>
+              <span>
+                {{ block.settings.city }}
+                {%- if block.settings.verified %} · Compra verificada{% endif -%}
+              </span>
+            </div>
+
+            {%- if block.settings.verified -%}
+              <span class="mio-review__verified" title="Compra verificada" aria-label="Compra verificada">
+                {% render 'mio-icons', icon: 'shield', size: 16 %}
+              </span>
+            {%- endif -%}
+          </footer>
+        </figure>
+      {%- endfor -%}
+    </div>
+
+    {%- if section.settings.note != blank -%}
+      <p class="mio-reviews__note">{{ section.settings.note }}</p>
+    {%- endif -%}
+  </section>
+{%- endif -%}
+
+{% stylesheet %}
+  .mio-reviews__header {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 18px;
+    margin-block-end: 28px;
+  }
+
+  .mio-reviews__eyebrow {
+    margin: 0 0 6px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgb(var(--color-foreground-rgb) / 0.55);
+  }
+
+  .mio-reviews__title {
+    margin: 0;
+    font-size: clamp(1.75rem, 4.4vw, 2.75rem);
+    line-height: 1.03;
+    letter-spacing: -0.035em;
+  }
+
+  .mio-reviews__subheading {
+    margin: 8px 0 0;
+    max-width: 52ch;
+    font-size: 0.9375rem;
+    color: rgb(var(--color-foreground-rgb) / 0.66);
+  }
+
+  .mio-reviews__summary {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 14px;
+    border: 1px solid rgb(var(--color-foreground-rgb) / 0.1);
+    border-radius: 100px;
+  }
+
+  .mio-reviews__summary-stars {
+    display: inline-flex;
+    color: #f5a623;
+  }
+
+  .mio-reviews__summary p {
+    margin: 0;
+    font-size: 0.75rem;
+    line-height: 1.2;
+  }
+
+  .mio-reviews__summary strong {
+    font-size: 0.875rem;
+  }
+
+  .mio-reviews__summary span {
+    display: block;
+    color: rgb(var(--color-foreground-rgb) / 0.55);
+    font-size: 0.6875rem;
+  }
+
+  .mio-reviews__grid {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(78vw, 1fr);
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    margin-inline: calc(var(--page-margin) * -1);
+    padding-inline: var(--page-margin);
+    padding-block-end: 4px;
+  }
+
+  .mio-reviews__grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mio-review {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    scroll-snap-align: start;
+    margin: 0;
+    padding: 20px;
+    border: 1px solid rgb(var(--color-foreground-rgb) / 0.1);
+    border-radius: 18px;
+    background: rgb(var(--color-foreground-rgb) / 0.015);
+  }
+
+  .mio-review__rating {
+    display: inline-flex;
+    gap: 2px;
+    color: #f5a623;
+  }
+
+  .mio-review__star--empty {
+    color: rgb(var(--color-foreground-rgb) / 0.18);
+  }
+
+  .mio-review__quote {
+    margin: 0;
+    font-size: 0.9375rem;
+    line-height: 1.5;
+    color: var(--color-foreground);
+  }
+
+  .mio-review__footer {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-block-start: auto;
+    padding-block-start: 4px;
+  }
+
+  .mio-review__avatar {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    flex: 0 0 auto;
+  }
+
+  .mio-review__avatar--initials {
+    display: grid;
+    place-items: center;
+    background: var(--mio-yellow);
+    color: var(--mio-ink);
+    font-weight: 700;
+    font-size: 0.9375rem;
+  }
+
+  .mio-review__author {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+
+  .mio-review__author strong {
+    font-size: 0.8125rem;
+    font-weight: 600;
+  }
+
+  .mio-review__author span {
+    font-size: 0.6875rem;
+    color: rgb(var(--color-foreground-rgb) / 0.55);
+  }
+
+  .mio-review__verified {
+    display: inline-flex;
+    margin-inline-start: auto;
+    color: var(--mio-green);
+  }
+
+  .mio-reviews__note {
+    margin: 18px 0 0;
+    font-size: 0.6875rem;
+    text-align: center;
+    color: rgb(var(--color-foreground-rgb) / 0.5);
+  }
+
+  @media screen and (min-width: 750px) {
+    .mio-reviews__grid {
+      grid-auto-flow: initial;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 16px;
+      overflow: visible;
+      margin-inline: 0;
+      padding-inline: 0;
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .mio-review {
+      padding: 24px;
+      border-radius: 20px;
+    }
+
+    .mio-review__quote {
+      font-size: 1rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Mio · Reseñas",
+  "class": "mio-reviews-wrapper",
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer"
+    ]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Antetítulo",
+      "default": "Clientes reales"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Lo que dicen de Mio Store"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subtítulo",
+      "default": "Miles de pedidos entregados en toda Colombia."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_summary",
+      "label": "Mostrar resumen de calificación",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "average_rating",
+      "label": "Calificación promedio",
+      "default": "4.9"
+    },
+    {
+      "type": "text",
+      "id": "review_count",
+      "label": "Número de reseñas",
+      "default": "1.284"
+    },
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Nota al pie",
+      "default": "Reseñas recopiladas después de la entrega del pedido."
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Esquema de color",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Ancho",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Página"
+        },
+        {
+          "value": "full-width",
+          "label": "Completo"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "header",
+      "content": "Espaciado"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Arriba",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Abajo",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    }
+  ],
+  "blocks": [
+    {
+      "type": "mio_review",
+      "name": "Reseña",
+      "limit": 9,
+      "settings": [
+        {
+          "type": "range",
+          "id": "rating",
+          "label": "Estrellas",
+          "min": 1,
+          "max": 5,
+          "step": 1,
+          "default": 5
+        },
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Reseña",
+          "default": "Llegó en dos días y pagué contra entrega. La calidad es mejor de lo que esperaba."
+        },
+        {
+          "type": "text",
+          "id": "name",
+          "label": "Nombre",
+          "default": "Mariana G."
+        },
+        {
+          "type": "text",
+          "id": "city",
+          "label": "Ciudad",
+          "default": "Medellín"
+        },
+        {
+          "type": "checkbox",
+          "id": "verified",
+          "label": "Compra verificada",
+          "default": true
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Foto (opcional)"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Mio · Reseñas",
+      "category": "Mio Store",
+      "blocks": {
+        "r1": {
+          "type": "mio_review",
+          "settings": {
+            "quote": "Pedí un martes y el jueves ya lo tenía en casa. Todo llegó perfecto y pagué al recibir.",
+            "name": "Mariana G.",
+            "city": "Medellín"
+          }
+        },
+        "r2": {
+          "type": "mio_review",
+          "settings": {
+            "quote": "Me daba miedo comprar por internet, pero el pago contra entrega me dio confianza. Excelente.",
+            "name": "Andrés R.",
+            "city": "Bogotá"
+          }
+        },
+        "r3": {
+          "type": "mio_review",
+          "settings": {
+            "quote": "La atención por WhatsApp fue súper rápida. Ya voy por mi segunda compra en Mio Store.",
+            "name": "Valentina M.",
+            "city": "Cali"
+          }
+        }
+      },
+      "block_order": [
+        "r1",
+        "r2",
+        "r3"
+      ]
+    }
+  ]
+}
+{% endschema %}

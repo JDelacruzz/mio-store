@@ -1,0 +1,359 @@
+{%- if section.blocks.size > 0 -%}
+  <div class="section-background color-{{ section.settings.color_scheme }}"></div>
+
+  <section
+    class="mio-faq section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }} spacing-style"
+    style="{% render 'spacing-style', settings: section.settings %}"
+  >
+    <div class="mio-faq__layout">
+      <header class="mio-faq__header" data-mio-reveal>
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="mio-faq__eyebrow">{{ section.settings.eyebrow }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="mio-faq__title">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.text != blank -%}
+          <div class="mio-faq__text rte">{{ section.settings.text }}</div>
+        {%- endif -%}
+
+        {%- if section.settings.whatsapp_label != blank and section.settings.whatsapp_link != blank -%}
+          <a
+            class="mio-faq__wa"
+            href="{{ section.settings.whatsapp_link }}"
+            target="_blank"
+            rel="noopener"
+          >
+            {% render 'mio-icons', icon: 'whatsapp', size: 18 %}
+            {{ section.settings.whatsapp_label }}
+          </a>
+        {%- endif -%}
+      </header>
+
+      <div class="mio-faq__list" data-mio-stagger="50">
+        {%- for block in section.blocks -%}
+          <details class="mio-faq__item" data-mio-reveal {{ block.shopify_attributes }}>
+            <summary class="mio-faq__question">
+              <span>{{ block.settings.question }}</span>
+              <span class="mio-faq__toggle" aria-hidden="true">
+                <svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+                  <path d="M8 3v10M3 8h10" />
+                </svg>
+              </span>
+            </summary>
+            <div class="mio-faq__answer rte">
+              {{ block.settings.answer }}
+            </div>
+          </details>
+        {%- endfor -%}
+      </div>
+    </div>
+  </section>
+{%- endif -%}
+
+{% stylesheet %}
+  .mio-faq__layout {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 26px;
+    align-items: start;
+  }
+
+  .mio-faq__eyebrow {
+    margin: 0 0 6px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgb(var(--color-foreground-rgb) / 0.55);
+  }
+
+  .mio-faq__title {
+    margin: 0;
+    font-size: clamp(1.75rem, 4.4vw, 2.75rem);
+    line-height: 1.03;
+    letter-spacing: -0.035em;
+    text-wrap: balance;
+  }
+
+  .mio-faq__text {
+    margin-block-start: 10px;
+    max-width: 46ch;
+    font-size: 0.9375rem;
+    color: rgb(var(--color-foreground-rgb) / 0.66);
+  }
+
+  .mio-faq__text p {
+    margin: 0;
+  }
+
+  .mio-faq__wa {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-block-start: 18px;
+    padding: 11px 16px;
+    border-radius: 100px;
+    background: var(--mio-green);
+    color: #fff;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: transform 180ms var(--mio-ease-out);
+  }
+
+  .mio-faq__wa:active {
+    transform: scale(0.98);
+  }
+
+  .mio-faq__list {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  .mio-faq__item {
+    border: 1px solid rgb(var(--color-foreground-rgb) / 0.1);
+    border-radius: 14px;
+    background: rgb(var(--color-foreground-rgb) / 0.015);
+    overflow: hidden;
+  }
+
+  .mio-faq__item[open] {
+    background: rgb(var(--color-foreground-rgb) / 0.035);
+  }
+
+  .mio-faq__question {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    padding: 16px 18px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.35;
+    color: var(--color-foreground-heading);
+  }
+
+  .mio-faq__question:focus-visible {
+    outline-offset: -2px;
+  }
+
+  .mio-faq__toggle {
+    display: grid;
+    place-items: center;
+    flex: 0 0 auto;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: rgb(var(--color-foreground-rgb) / 0.06);
+    transition: transform 260ms var(--mio-ease-out);
+  }
+
+  .mio-faq__toggle svg {
+    width: 13px;
+    height: 13px;
+  }
+
+  .mio-faq__item[open] .mio-faq__toggle {
+    transform: rotate(45deg);
+    background: var(--mio-yellow);
+    color: var(--mio-ink);
+  }
+
+  .mio-faq__answer {
+    padding: 0 18px 16px;
+    font-size: 0.8125rem;
+    line-height: 1.55;
+    color: rgb(var(--color-foreground-rgb) / 0.72);
+  }
+
+  .mio-faq__answer > :first-child {
+    margin-block-start: 0;
+  }
+
+  .mio-faq__answer > :last-child {
+    margin-block-end: 0;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mio-faq__toggle {
+      transition: none;
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .mio-faq__layout {
+      grid-template-columns: 0.8fr 1.2fr;
+      gap: 64px;
+    }
+
+    .mio-faq__header {
+      position: sticky;
+      top: calc(var(--header-group-height, 0px) + 32px);
+    }
+
+    .mio-faq__question {
+      padding: 18px 20px;
+      font-size: 0.9375rem;
+    }
+
+    .mio-faq__answer {
+      padding: 0 20px 18px;
+      font-size: 0.875rem;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Mio · FAQ",
+  "class": "mio-faq-wrapper",
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer"
+    ]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Antetítulo",
+      "default": "Antes de comprar"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Preguntas frecuentes"
+    },
+    {
+      "type": "richtext",
+      "id": "text",
+      "label": "Texto",
+      "default": "<p>Resolvemos las dudas más comunes sobre envíos, pagos y garantías.</p>"
+    },
+    {
+      "type": "text",
+      "id": "whatsapp_label",
+      "label": "Botón de WhatsApp",
+      "default": "Hablar con un asesor"
+    },
+    {
+      "type": "url",
+      "id": "whatsapp_link",
+      "label": "Enlace de WhatsApp",
+      "info": "Formato: https://wa.me/57XXXXXXXXXX"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Esquema de color",
+      "default": "scheme-3"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Ancho",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Página"
+        },
+        {
+          "value": "full-width",
+          "label": "Completo"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "header",
+      "content": "Espaciado"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Arriba",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Abajo",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    }
+  ],
+  "blocks": [
+    {
+      "type": "mio_faq_item",
+      "name": "Pregunta",
+      "settings": [
+        {
+          "type": "text",
+          "id": "question",
+          "label": "Pregunta",
+          "default": "¿Cuánto tarda el envío?"
+        },
+        {
+          "type": "richtext",
+          "id": "answer",
+          "label": "Respuesta",
+          "default": "<p>Los envíos nacionales tardan entre 1 y 3 días hábiles después de confirmar tu pedido. Envíos internacionales pueden tardar de 10 a 20 días.</p>"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Mio · FAQ",
+      "category": "Mio Store",
+      "blocks": {
+        "q1": {
+          "type": "mio_faq_item",
+          "settings": {
+            "question": "¿Puedo pagar contra entrega?",
+            "answer": "<p>Sí. Pagas en efectivo cuando recibes tu pedido en la puerta de tu casa u oficina, en las principales ciudades de Colombia.</p>"
+          }
+        },
+        "q2": {
+          "type": "mio_faq_item",
+          "settings": {
+            "question": "¿Cuánto tarda el envío?",
+            "answer": "<p>Entre 1 y 3 días hábiles para productos con envío nacional. Los productos importados tardan entre 10 y 20 días y siempre incluyen seguimiento.</p>"
+          }
+        },
+        "q3": {
+          "type": "mio_faq_item",
+          "settings": {
+            "question": "¿Cómo hago seguimiento a mi pedido?",
+            "answer": "<p>Te enviamos el número de guía por WhatsApp y correo en cuanto el pedido sale del proveedor.</p>"
+          }
+        },
+        "q4": {
+          "type": "mio_faq_item",
+          "settings": {
+            "question": "¿Qué pasa si mi producto llega defectuoso?",
+            "answer": "<p>Escríbenos dentro de los 30 días siguientes a la entrega. Te cambiamos el producto o te devolvemos el dinero.</p>"
+          }
+        }
+      },
+      "block_order": [
+        "q1",
+        "q2",
+        "q3",
+        "q4"
+      ]
+    }
+  ]
+}
+{% endschema %}

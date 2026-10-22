@@ -1,0 +1,224 @@
+{% doc %}
+  Capa de proveedores de Mio Store — Dropi, Mastershop, AliExpress y otros.
+
+  Resuelve el proveedor de un producto con esta prioridad:
+    1. Metafield `mio.supplier` (o `custom.supplier` como respaldo).
+    2. Tags del producto: `proveedor:dropi`, `supplier:dropi`, `dropi`,
+       `mastershop`, `aliexpress` (también `master_shop` y `ali_express`).
+    3. Valor por defecto: "manual" (Mio Store).
+
+  Tiempos y condiciones se pueden sobrescribir con metafields:
+    mio.shipping_min_days, mio.shipping_max_days, mio.ships_from,
+    mio.cod_available, mio.supplier_product_id, mio.supplier_variant_id,
+    mio.supplier_url.
+
+  @param {object} product - Producto de Shopify
+  @param {string} [mode] - info | badge | json | fields
+  @param {boolean} [show_origin] - Mostrar la insignia de origen
+
+  @example
+  {% render 'mio-supplier', product: product %}
+{% enddoc %}
+
+{%- liquid
+  assign mio_product = product | default: closest.product
+  assign supplier_raw = ''
+
+  if mio_product != blank
+    assign supplier_raw = mio_product.metafields.mio.supplier.value
+    if supplier_raw == blank
+      assign supplier_raw = mio_product.metafields.custom.supplier.value
+    endif
+
+    # Si el metafield es una lista, tomamos el primer valor.
+    if supplier_raw.first
+      assign supplier_raw = supplier_raw.first
+    endif
+
+    # Respaldo por tags (compatible con apps que solo escriben tags).
+    # Se compara el tag completo para evitar falsos positivos.
+    if supplier_raw == blank
+      capture tag_string
+        echo ','
+        for tag in mio_product.tags
+          echo tag | downcase
+          echo ','
+        endfor
+      endcapture
+
+      if tag_string contains ',proveedor:dropi,' or tag_string contains ',supplier:dropi,' or tag_string contains ',dropi,'
+        assign supplier_raw = 'dropi'
+      elsif tag_string contains ',proveedor:mastershop,' or tag_string contains ',supplier:mastershop,' or tag_string contains ',mastershop,' or tag_string contains ',master_shop,'
+        assign supplier_raw = 'mastershop'
+      elsif tag_string contains ',proveedor:aliexpress,' or tag_string contains ',supplier:aliexpress,' or tag_string contains ',aliexpress,' or tag_string contains ',ali_express,'
+        assign supplier_raw = 'aliexpress'
+      endif
+    endif
+  endif
+
+  assign supplier_handle = supplier_raw | default: 'manual' | downcase | strip | replace: ' ', '_' | replace: '-', '_'
+
+  case supplier_handle
+    when 'dropi'
+      assign supplier_name = 'Dropi'
+      assign supplier_origin = 'Colombia'
+      assign shipping_min = 1
+      assign shipping_max = 3
+      assign cod_default = true
+      assign supplier_note = 'Envío nacional con Dropi'
+    when 'mastershop'
+      assign supplier_name = 'Mastershop'
+      assign supplier_origin = 'Colombia'
+      assign shipping_min = 1
+      assign shipping_max = 4
+      assign cod_default = true
+      assign supplier_note = 'Envío nacional con Mastershop'
+    when 'aliexpress'
+      assign supplier_name = 'AliExpress'
+      assign supplier_origin = 'China'
+      assign shipping_min = 10
+      assign shipping_max = 20
+      assign cod_default = false
+      assign supplier_note = 'Importado · seguimiento internacional'
+    else
+      assign supplier_name = 'Mio Store'
+      assign supplier_origin = 'Colombia'
+      assign shipping_min = 2
+      assign shipping_max = 5
+      assign cod_default = true
+      assign supplier_note = 'Envío nacional'
+  endcase
+
+  assign shipping_min_days = mio_product.metafields.mio.shipping_min_days.value | default: shipping_min
+  assign shipping_max_days = mio_product.metafields.mio.shipping_max_days.value | default: shipping_max
+  assign ships_from = mio_product.metafields.mio.ships_from.value | default: supplier_origin
+
+  assign cod_available = mio_product.metafields.mio.cod_available.value
+  if cod_available == nil or cod_available == blank
+    assign cod_available = cod_default
+  endif
+
+  assign supplier_product_id = mio_product.metafields.mio.supplier_product_id.value | default: ''
+  assign supplier_variant_id = mio_product.metafields.mio.supplier_variant_id.value | default: ''
+  assign supplier_url = mio_product.metafields.mio.supplier_url.value | default: ''
+
+  # Rango de fechas estimado en formato dd/mm (neutro para cualquier locale).
+  assign now_ts = 'now' | date: '%s' | plus: 0
+  assign min_seconds = shipping_min_days | times: 86400
+  assign max_seconds = shipping_max_days | times: 86400
+  assign min_ts = now_ts | plus: min_seconds
+  assign max_ts = now_ts | plus: max_seconds
+  assign min_date = min_ts | date: '%d/%m'
+  assign max_date = max_ts | date: '%d/%m'
+-%}
+
+{%- case mode -%}
+  {%- when 'json' -%}
+    {%- if mio_product != blank -%}
+      <script
+        type="application/json"
+        data-mio-supplier-json
+        data-product-id="{{ mio_product.id }}"
+      >
+        {
+          "supplier": {{ supplier_handle | json }},
+          "supplierName": {{ supplier_name | json }},
+          "supplierProductId": {{ supplier_product_id | json }},
+          "supplierVariantId": {{ supplier_variant_id | json }},
+          "supplierUrl": {{ supplier_url | json }},
+          "origin": {{ ships_from | json }},
+          "shippingMin": {{ shipping_min_days | json }},
+          "shippingMax": {{ shipping_max_days | json }},
+          "cod": {{ cod_available | json }}
+        }
+      </script>
+    {%- endif -%}
+
+  {%- when 'badge' -%}
+    <span class="mio-supplier-badge mio-supplier-badge--{{ supplier_handle }}">
+      {%- if supplier_handle == 'aliexpress' -%}
+        {% render 'mio-icons', icon: 'package', size: 14 %}
+        {{ 'Importado' }}
+      {%- else -%}
+        {% render 'mio-icons', icon: 'flag', size: 14 %}
+        {{ 'Envío nacional' }}
+      {%- endif -%}
+    </span>
+
+  {%- when 'fields' -%}
+    {%- if mio_product != blank -%}
+      <input type="hidden" name="properties[_proveedor]" value="{{ supplier_name | escape }}">
+      <input type="hidden" name="properties[_proveedor_codigo]" value="{{ supplier_product_id | escape }}">
+      <input type="hidden" name="properties[_proveedor_url]" value="{{ supplier_url | escape }}">
+      <input type="hidden" name="properties[_proveedor_origen]" value="{{ ships_from | escape }}">
+    {%- endif -%}
+
+  {%- else -%}
+    {%- if mio_product != blank -%}
+      <div
+        class="mio-supplier-info"
+        data-mio-supplier="{{ supplier_handle }}"
+        {% if show_origin == false %}
+          data-hide-origin
+        {% endif %}
+      >
+        <div class="mio-supplier-info__origin">
+          <span class="mio-supplier-badge mio-supplier-badge--{{ supplier_handle }}">
+            {%- if supplier_handle == 'aliexpress' -%}
+              {% render 'mio-icons', icon: 'package', size: 14 %}
+            {%- else -%}
+              {% render 'mio-icons', icon: 'flag', size: 14 %}
+            {%- endif -%}
+            {{ ships_from }}
+          </span>
+          <span class="mio-supplier-info__synced">
+            {% render 'mio-icons', icon: 'shield', size: 14 %}
+            Stock sincronizado
+          </span>
+        </div>
+
+        <ul class="mio-supplier-info__list" role="list">
+          <li>
+            <span class="mio-supplier-info__icon" aria-hidden="true">
+              {% render 'mio-icons', icon: 'truck', size: 20 %}
+            </span>
+            <span>
+              <strong>Llega entre el {{ min_date }} y el {{ max_date }}</strong>
+              <small>{{ supplier_note }} · {{ shipping_min_days }} a {{ shipping_max_days }} días</small>
+            </span>
+          </li>
+
+          <li>
+            <span class="mio-supplier-info__icon" aria-hidden="true">
+              {% render 'mio-icons', icon: 'cash', size: 20 %}
+            </span>
+            <span>
+              {%- if cod_available -%}
+                <strong>Paga contra entrega</strong>
+                <small>Pagas en efectivo cuando recibes tu pedido</small>
+              {%- else -%}
+                <strong>Pago 100% seguro</strong>
+                <small>Tarjetas, PSE y billeteras digitales</small>
+              {%- endif -%}
+            </span>
+          </li>
+
+          <li>
+            <span class="mio-supplier-info__icon" aria-hidden="true">
+              {% render 'mio-icons', icon: 'return', size: 20 %}
+            </span>
+            <span>
+              <strong>Cambios y devoluciones</strong>
+              <small>30 días de garantía directa con Mio Store</small>
+            </span>
+          </li>
+        </ul>
+
+        {%- if supplier_product_id != blank -%}
+          <p class="mio-supplier-info__ref">Ref. proveedor: {{ supplier_product_id }}</p>
+        {%- endif -%}
+      </div>
+
+      {% render 'mio-supplier', product: mio_product, mode: 'json' %}
+    {%- endif -%}
+{%- endcase -%}

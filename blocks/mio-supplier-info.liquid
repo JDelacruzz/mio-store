@@ -1,0 +1,99 @@
+{% doc %}
+  Bloque de confianza en la ficha de producto. Muestra origen,
+  tiempos de entrega reales del proveedor, pago contra entrega y
+  garantía. Se alimenta de la capa de proveedores (Dropi,
+  Mastershop, AliExpress) sin acoplar el tema a una app.
+{% enddoc %}
+
+<div
+  class="mio-supplier-block spacing-style"
+  style="{% render 'spacing-style', settings: block.settings %}"
+  {{ block.shopify_attributes }}
+>
+  {%- if block.settings.heading != blank -%}
+    <p class="mio-supplier-block__heading">{{ block.settings.heading }}</p>
+  {%- endif -%}
+
+  {% render 'mio-supplier',
+    product: closest.product,
+    show_origin: block.settings.show_origin
+  %}
+
+  {%- if block.settings.note != blank -%}
+    <p class="mio-supplier-block__note">{{ block.settings.note }}</p>
+  {%- endif -%}
+</div>
+
+{% stylesheet %}
+  .mio-supplier-block__heading {
+    margin: 0 0 8px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: rgb(var(--color-foreground-rgb) / 0.55);
+  }
+
+  .mio-supplier-block__note {
+    margin: 8px 0 0;
+    font-size: 0.6875rem;
+    color: rgb(var(--color-foreground-rgb) / 0.5);
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Confianza del proveedor",
+  "tag": null,
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Envío y garantía"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_origin",
+      "label": "Mostrar origen (Colombia / China)",
+      "default": true
+    },
+    {
+      "type": "text",
+      "id": "note",
+      "label": "Nota al pie",
+      "default": "Los tiempos de entrega se calculan automáticamente según el proveedor."
+    },
+    {
+      "type": "header",
+      "content": "Espaciado"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Arriba",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Abajo",
+      "min": 0,
+      "max": 100,
+      "step": 1,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "presets": [
+    {
+      "name": "Confianza del proveedor",
+      "category": "Mio Store"
+    }
+  ]
+}
+{% endschema %}

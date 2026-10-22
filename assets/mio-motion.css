@@ -1,0 +1,272 @@
+/*
+  Mio Store — Sistema de movimiento
+  ---------------------------------
+  Reglas del sistema:
+  · Solo transform y opacity (GPU). clip-path únicamente para máscaras de imagen.
+  · Curvas fuertes ease-out para entradas, ease-in-out para movimiento en pantalla.
+  · Las animaciones de scroll se ejecutan UNA sola vez.
+  · prefers-reduced-motion conserva la opacidad y elimina los desplazamientos.
+  · Nada supera 600ms en UI; el "delight" se reserva al hero (primera visita).
+*/
+
+:root {
+  --mio-ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --mio-ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --mio-ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --mio-ease-hover: cubic-bezier(0.4, 0, 0.2, 1);
+
+  --mio-dur-press: 140ms;
+  --mio-dur-hover: 220ms;
+  --mio-dur-reveal: 560ms;
+
+  --mio-reveal-distance: 18px;
+  --mio-stagger-step: 70ms;
+  --mio-stagger-max: 420ms;
+
+  /* Identidad Mio Store (acentos de marca, independientes del esquema) */
+  --mio-yellow: #ffd400;
+  --mio-yellow-soft: #fff2b8;
+  --mio-ink: #101014;
+  --mio-blue: #0b3da8;
+  --mio-red: #d62828;
+  --mio-green: #0b6b45;
+}
+
+/* ---------------------------------------------------------------
+   1. Reveal al hacer scroll
+   El estado inicial solo se oculta si el JS de movimiento cargó
+   (.mio-js). Si el script falla, un failsafe retira la clase y el
+   contenido queda visible. Sin "flash" de contenido.
+--------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .mio-js [data-mio-reveal] {
+    opacity: 0;
+    transform: translate3d(0, var(--mio-reveal-distance), 0);
+    transition:
+      opacity var(--mio-dur-reveal) var(--mio-ease-out),
+      transform var(--mio-dur-reveal) var(--mio-ease-out),
+      clip-path var(--mio-dur-reveal) var(--mio-ease-in-out);
+    transition-delay: var(--mio-delay, 0ms);
+    will-change: opacity, transform;
+  }
+
+  .mio-js [data-mio-reveal='fade'] {
+    transform: none;
+  }
+
+  .mio-js [data-mio-reveal='scale'] {
+    transform: scale(0.97);
+  }
+
+  .mio-js [data-mio-reveal='clip'] {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(0 0 100% 0);
+  }
+
+  .mio-js [data-mio-reveal][data-mio-visible] {
+    opacity: 1;
+    transform: none;
+    clip-path: inset(0 0 0 0);
+    will-change: auto;
+  }
+}
+
+/* Reduced motion: aparece con un fade corto, sin desplazamiento. */
+@media (prefers-reduced-motion: reduce) {
+  [data-mio-reveal] {
+    opacity: 1;
+    transform: none;
+    clip-path: none;
+  }
+}
+
+/* ---------------------------------------------------------------
+   2. Entrada del hero (primera visita = presupuesto de delight)
+   Animación CSS pura: corre fuera del hilo principal incluso
+   mientras la página termina de cargar.
+--------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: no-preference) {
+  .mio-js [data-mio-hero] [data-mio-hero-item] {
+    animation: mio-rise 720ms var(--mio-ease-out) both;
+    animation-delay: calc(var(--mio-hero-index, 0) * 90ms + 80ms);
+  }
+
+  .mio-js [data-mio-hero] [data-mio-hero-media] {
+    animation: mio-media-in 900ms var(--mio-ease-out) both;
+    animation-delay: 120ms;
+  }
+}
+
+@keyframes mio-rise {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 22px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes mio-media-in {
+  from {
+    opacity: 0;
+    transform: scale(1.03);
+  }
+
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ---------------------------------------------------------------
+   3. Micro-interacciones
+--------------------------------------------------------------- */
+
+/* Presión de botón: feedback físico inmediato. */
+.button,
+.button-secondary,
+button.shopify-payment-button__button--unbranded,
+.mio-btn,
+.mio-icon-btn {
+  transition:
+    transform var(--mio-dur-press) var(--mio-ease-out),
+    color var(--animation-speed) var(--animation-easing),
+    background-color var(--animation-speed) var(--animation-easing),
+    border-color var(--animation-speed) var(--animation-easing),
+    box-shadow var(--mio-dur-hover) var(--mio-ease-out);
+}
+
+.button:active:not([disabled], [aria-disabled='true']),
+.button-secondary:active:not([disabled], [aria-disabled='true']),
+button.shopify-payment-button__button--unbranded:active:not([disabled]),
+.mio-btn:active,
+.mio-icon-btn:active {
+  transform: scale(0.975);
+}
+
+/* Hover solo en dispositivos con puntero fino (el tap no dispara hover falso). */
+@media (hover: hover) and (pointer: fine) and (prefers-reduced-motion: no-preference) {
+  .button:hover:not([disabled], [aria-disabled='true']),
+  .button-secondary:hover:not([disabled], [aria-disabled='true']),
+  button.shopify-payment-button__button--unbranded:hover:not([disabled]) {
+    transform: translateY(-1px);
+  }
+
+  .mio-lift:hover {
+    transform: translateY(-3px);
+  }
+}
+
+/* ---------------------------------------------------------------
+   4. Utilidades compartidas por las secciones Mio
+--------------------------------------------------------------- */
+
+.mio-reveal-mask {
+  overflow: hidden;
+  border-radius: var(--mio-radius-lg, 20px);
+}
+
+.mio-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Carrusel horizontal nativo para móvil: sin JS, con snap suave. */
+.mio-scroller {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(min(78vw, 22rem), 1fr);
+  gap: 12px;
+  overflow-x: auto;
+  overscroll-behavior-x: contain;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+  padding-block-end: 4px;
+  padding-inline: 0;
+}
+
+.mio-scroller::-webkit-scrollbar {
+  display: none;
+}
+
+.mio-scroller > * {
+  scroll-snap-align: start;
+}
+
+@media screen and (min-width: 750px) {
+  .mio-scroller {
+    grid-auto-flow: initial;
+    grid-auto-columns: initial;
+    grid-template-columns: repeat(var(--mio-scroller-cols, 3), minmax(0, 1fr));
+    gap: var(--mio-scroller-gap, 20px);
+    overflow: visible;
+    scroll-snap-type: none;
+  }
+}
+
+/* ---------------------------------------------------------------
+   5. Marquee (movimiento constante = linear)
+--------------------------------------------------------------- */
+
+.mio-marquee {
+  overflow: hidden;
+  --mio-marquee-duration: 32s;
+}
+
+.mio-marquee__track {
+  display: flex;
+  width: max-content;
+  animation: mio-marquee var(--mio-marquee-duration) linear infinite;
+}
+
+.mio-marquee__group {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+@keyframes mio-marquee {
+  to {
+    transform: translate3d(-50%, 0, 0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .mio-marquee__track {
+    animation: none;
+  }
+}
+
+/* ---------------------------------------------------------------
+   6. Accesibilidad
+--------------------------------------------------------------- */
+
+:focus-visible {
+  outline: 2px solid var(--mio-blue);
+  outline-offset: 3px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .mio-lift,
+  .mio-lift:hover {
+    transform: none;
+  }
+}

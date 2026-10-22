@@ -1,0 +1,230 @@
+# Definiciones de metafields — Mio Store
+#
+# Cómo usarlo:
+#   1. Abre la Admin API de tu tienda (Shopify Admin → Configuración → Apps →
+#      Desarrollar apps → API de Admin) o usa Shopify CLI.
+#   2. Ejecuta cada mutación por separado en el GraphQL explorer.
+#   3. Requiere el scope `write_products`.
+#   4. Ajusta la versión de API a la vigente en tu tienda.
+#
+# Alternativa sin código:
+#   Configuración → Datos personalizados → Productos → Agregar definición.
+#   Namespace: mio · Key: supplier · Tipo: texto de una línea.
+#
+# El tema funciona aunque estas definiciones no existan: usa valores por defecto.
+# Las definiciones solo agregan validación y una UI clara en el Admin.
+
+# ---------------------------------------------------------------------------
+# 1. Proveedor
+# ---------------------------------------------------------------------------
+mutation CrearProveedor {
+  metafieldDefinitionCreate(
+    definition: {
+      name: "Proveedor"
+      namespace: "mio"
+      key: "supplier"
+      description: "dropi | mastershop | aliexpress | manual"
+      type: "single_line_text_field"
+      ownerType: PRODUCT
+      validations: [
+        {
+          name: "choices"
+          value: "[\"dropi\",\"mastershop\",\"aliexpress\",\"manual\"]"
+        }
+      ]
+      access: { admin: MERCHANT_READ_WRITE, storefront: PUBLIC_READ }
+    }
+  ) {
+    createdDefinition {
+      id
+      name
+      namespace
+      key
+    }
+    userErrors {
+      field
+      message
+      code
+    }
+  }
+}
+
+# ---------------------------------------------------------------------------
+# 2. IDs del proveedor
+# ---------------------------------------------------------------------------
+mutation CrearSupplierProductId {
+  metafieldDefinitionCreate(
+    definition: {
+      name: "ID del producto en el proveedor"
+      namespace: "mio"
+      key: "supplier_product_id"
+      description: "SKU o ID con el que el proveedor identifica el producto"
+      type: "single_line_text_field"
+      ownerType: PRODUCT
+      access: { admin: MERCHANT_READ_WRITE, storefront: PUBLIC_READ }
+    }
+  ) {
+    createdDefinition { id key }
+    userErrors { field message code }
+  }
+}
+
+mutation CrearSupplierVariantId {
+  metafieldDefinitionCreate(
+    definition: {
+      name: "ID de la variante en el proveedor"
+      namespace: "mio"
+      key: "supplier_variant_id"
+      description: "Variante exacta (color/talla) en el proveedor"
+      type: "single_line_text_field"
+      ownerType: PRODUCT
+      access: { admin: MERCHANT_READ_WRITE, storefront: PUBLIC_READ }
+    }
+  ) {
+    createdDefinition { id key }
+    userErrors { field message code }
+  }
+}
+
+mutation CrearSupplierUrl {
+  metafieldDefinitionCreate(
+    definition: {
+      name: "URL del producto en el proveedor"
+      namespace: "mio"
+      key: "supplier_url"
+      description: "Enlace directo para reposición y reclamos"
+      type: "url"
+      ownerType: PRODUCT
+      access: { admin: MERCHANT_READ_WRITE, storefront: PUBLIC_READ }
+    }
+  ) {
+    createdDefinition { id key }
+    userErrors { field message code }
+  }
+}
+
+# ---------------------------------------------------------------------------
+# 3. Costo (solo admin: nunca se expone al storefront)
+# ---------------------------------------------------------------------------
+mutation CrearSupplierCost {
+  metafieldDefinitionCreate(
+    definition: {
+      name: "Costo del proveedor"
+      namespace: "mio"
+      key: "supplier_cost"
+      description: "Costo de compra en COP. Uso interno para margen."
+      type: "number_decimal"
+      ownerType: PRODUCT
+      validations: [{ name: "min", value: "0" }]
+      access: { admin: MERCHANT_READ_WRITE, storefront: NONE }
+    }
+  ) {
+    createdDefinition { id key }
+    userErrors { field message code }
+  }
+}
+
+# ---------------------------------------------------------------------------
+# 4. Tiempos de entrega y origen
+# ---------------------------------------------------------------------------
+mutation CrearShippingMin {
+  metafieldDefinitionCreate(
+    definition: {
+      name: "Días mínimos de entrega"
+      namespace: "mio"
+      key: "shipping_min_days"
+      description: "Días hábiles mínimos desde la compra"
+      type: "number_integer"
+      ownerType: PRODUCT
+      validations: [
+        { name: "min", value: "0" }
+        { name: "max", value: "90" }
+      ]
+      access: { admin: MERCHANT_READ_WRITE, storefront: PUBLIC_READ }
+    }
+  ) {
+    createdDefinition { id key }
+    userErrors { field message code }
+  }
+}
+
+mutation CrearShippingMax {
+  metafieldDefinitionCreate(
+    definition: {
+      name: "Días máximos de entrega"
+      namespace: "mio"
+      key: "shipping_max_days"
+      description: "Días hábiles máximos desde la compra"
+      type: "number_integer"
+      ownerType: PRODUCT
+      validations: [
+        { name: "min", value: "0" }
+        { name: "max", value: "90" }
+      ]
+      access: { admin: MERCHANT_READ_WRITE, storefront: PUBLIC_READ }
+    }
+  ) {
+    createdDefinition { id key }
+    userErrors { field message code }
+  }
+}
+
+mutation CrearShipsFrom {
+  metafieldDefinitionCreate(
+    definition: {
+      name: "Origen del envío"
+      namespace: "mio"
+      key: "ships_from"
+      description: "País desde el que se despacha: Colombia, China..."
+      type: "single_line_text_field"
+      ownerType: PRODUCT
+      access: { admin: MERCHANT_READ_WRITE, storefront: PUBLIC_READ }
+    }
+  ) {
+    createdDefinition { id key }
+    userErrors { field message code }
+  }
+}
+
+# ---------------------------------------------------------------------------
+# 5. Contra entrega y estado
+# ---------------------------------------------------------------------------
+mutation CrearCodDisponible {
+  metafieldDefinitionCreate(
+    definition: {
+      name: "Contra entrega disponible"
+      namespace: "mio"
+      key: "cod_available"
+      description: "true = muestra pago contra entrega en la ficha"
+      type: "boolean"
+      ownerType: PRODUCT
+      access: { admin: MERCHANT_READ_WRITE, storefront: PUBLIC_READ }
+    }
+  ) {
+    createdDefinition { id key }
+    userErrors { field message code }
+  }
+}
+
+mutation CrearSupplierStatus {
+  metafieldDefinitionCreate(
+    definition: {
+      name: "Estado del proveedor"
+      namespace: "mio"
+      key: "supplier_status"
+      description: "active | paused | out_of_stock"
+      type: "single_line_text_field"
+      ownerType: PRODUCT
+      validations: [
+        {
+          name: "choices"
+          value: "[\"active\",\"paused\",\"out_of_stock\"]"
+        }
+      ]
+      access: { admin: MERCHANT_READ_WRITE, storefront: PUBLIC_READ }
+    }
+  ) {
+    createdDefinition { id key }
+    userErrors { field message code }
+  }
+}

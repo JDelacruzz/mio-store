@@ -1,0 +1,72 @@
+{% doc %}
+  Iconos SVG de Mio Store. Heredan el color con currentColor y se
+  escalan con el contenedor.
+
+  @param {string} icon - truck | cash | shield | whatsapp | return | star | clock | package | spark | flag | card | gift
+  @param {number} [size] - Tamaño en px. Por defecto 24.
+  @param {string} [class] - Clase adicional para el SVG.
+
+  @example
+  {% render 'mio-icons', icon: 'truck', size: 20 %}
+{% enddoc %}
+
+{%- liquid
+  assign icon_size = size | default: 24
+  assign extra_class = class | default: ''
+-%}
+
+<svg
+  class="mio-icon {{ extra_class }}"
+  width="{{ icon_size }}"
+  height="{{ icon_size }}"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="currentColor"
+  stroke-width="1.6"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+  aria-hidden="true"
+  focusable="false"
+>
+  {%- case icon -%}
+    {%- when 'truck' -%}
+      <path d="M3 6.5h10.5v9H3z" />
+      <path d="M13.5 9.5h4l3 3v3h-7z" />
+      <circle cx="7" cy="17.5" r="1.8" />
+      <circle cx="17" cy="17.5" r="1.8" />
+    {%- when 'cash' -%}
+      <rect x="2.5" y="6" width="19" height="12" rx="2.5" />
+      <circle cx="12" cy="12" r="2.6" />
+      <path d="M6 9.5v5M18 9.5v5" />
+    {%- when 'shield' -%}
+      <path d="M12 3l7 3v5.5c0 4.3-2.9 7.7-7 9.5-4.1-1.8-7-5.2-7-9.5V6z" />
+      <path d="M9 12l2.2 2.2L15.5 10" />
+    {%- when 'whatsapp' -%}
+      <path d="M20 11.7a8 8 0 0 1-11.9 7L4 20l1.4-4a8 8 0 1 1 14.6-4.3z" />
+      <path d="M9.2 8.6c.4 2.3 1.9 3.9 4.2 4.5.7.2 1.3-.2 1.5-.9l.1-.5-1.8-.8-.7.7c-.9-.4-1.7-1.2-2.1-2.1l.7-.6-.8-1.8-.5.1c-.7.2-1 .8-.9 1.4z" />
+    {%- when 'return' -%}
+      <path d="M4 9h11a4.5 4.5 0 0 1 0 9H9" />
+      <path d="M8 5L4 9l4 4" />
+    {%- when 'star' -%}
+      <path d="M12 3.6l2.5 5.2 5.7.8-4.1 4 1 5.7-5.1-2.7-5.1 2.7 1-5.7-4.1-4 5.7-.8z" fill="currentColor" stroke="none" />
+    {%- when 'clock' -%}
+      <circle cx="12" cy="12" r="8.5" />
+      <path d="M12 7.5V12l3 2" />
+    {%- when 'package' -%}
+      <path d="M12 3l8 4.2v9.6L12 21l-8-4.2V7.2z" />
+      <path d="M4 7.2l8 4.2 8-4.2M12 11.4V21M8 5l8 4.2" />
+    {%- when 'spark' -%}
+      <path d="M12 3l1.8 5.2L19 10l-5.2 1.8L12 17l-1.8-5.2L5 10l5.2-1.8z" />
+      <path d="M18.5 15.5l.8 2.2 2.2.8-2.2.8-.8 2.2-.8-2.2-2.2-.8 2.2-.8z" />
+    {%- when 'flag' -%}
+      <path d="M5 21V4" />
+      <path d="M5 4h11l-1.6 4L16 12H5z" />
+    {%- when 'card' -%}
+      <rect x="2.5" y="5.5" width="19" height="13" rx="2.5" />
+      <path d="M2.5 10h19M6 14.5h3" />
+    {%- when 'gift' -%}
+      <path d="M4 10h16v10H4z" />
+      <path d="M2.5 7h19v3h-19zM12 7v13" />
+      <path d="M12 7S10.5 3.5 8.5 4.2C7 4.8 7.6 7 9.2 7M12 7s1.5-3.5 3.5-2.8C17 4.8 16.4 7 14.8 7" />
+  {%- endcase -%}
+</svg>

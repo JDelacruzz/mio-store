@@ -1,0 +1,269 @@
+{%- liquid
+  assign speed = section.settings.speed | default: 32
+-%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+
+<div
+  class="mio-marquee section section--full-width color-{{ section.settings.color_scheme }} spacing-style"
+  style="{% render 'spacing-style', settings: section.settings %} --mio-marquee-duration: {{ speed }}s;"
+>
+  <div class="mio-marquee__track">
+    {%- for pass in (1..2) -%}
+      <div class="mio-marquee__group" {% if pass == 2 %}aria-hidden="true"{% endif %}>
+        {%- for block in section.blocks -%}
+          <span class="mio-marquee__item" {% if pass == 1 %}{{ block.shopify_attributes }}{% endif %}>
+            {%- if block.settings.icon != 'none' -%}
+              {% render 'mio-icons', icon: block.settings.icon, size: 15 %}
+            {%- endif -%}
+            {{ block.settings.text }}
+          </span>
+          <span class="mio-marquee__sep" aria-hidden="true">
+            {% render 'mio-icons', icon: 'star', size: 10 %}
+          </span>
+        {%- endfor -%}
+      </div>
+    {%- endfor -%}
+  </div>
+
+  <button
+    class="mio-marquee__pause"
+    type="button"
+    aria-label="Pausar movimiento"
+    aria-pressed="false"
+    data-mio-marquee-pause
+  >
+    <svg class="mio-marquee__pause-icon" viewBox="0 0 12 12" aria-hidden="true" focusable="false">
+      <rect x="2.5" y="2" width="2.4" height="8" rx="0.8" fill="currentColor" />
+      <rect x="7.1" y="2" width="2.4" height="8" rx="0.8" fill="currentColor" />
+    </svg>
+    <svg class="mio-marquee__play-icon" viewBox="0 0 12 12" aria-hidden="true" focusable="false">
+      <path d="M3.2 2.1 9.6 6l-6.4 3.9z" fill="currentColor" />
+    </svg>
+  </button>
+</div>
+
+{% stylesheet %}
+  .mio-marquee {
+    padding-block: 10px;
+    position: relative;
+  }
+
+  .mio-marquee[data-mio-marquee-paused] .mio-marquee__track {
+    animation-play-state: paused;
+  }
+
+  .mio-marquee__pause {
+    position: absolute;
+    inset-inline-end: 8px;
+    inset-block-start: 50%;
+    transform: translateY(-50%);
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 28px;
+    height: 28px;
+    padding: 0;
+    border: 1px solid rgb(var(--color-foreground-rgb) / 0.18);
+    border-radius: 50%;
+    background: rgb(var(--color-background-rgb) / 0.72);
+    color: var(--color-foreground);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    cursor: pointer;
+    transition: background-color 160ms var(--mio-ease-out);
+  }
+
+  .mio-marquee__pause:hover {
+    background: rgb(var(--color-background-rgb) / 0.95);
+  }
+
+  .mio-marquee__pause svg {
+    width: 12px;
+    height: 12px;
+  }
+
+  .mio-marquee__play-icon {
+    display: none;
+  }
+
+  .mio-marquee[data-mio-marquee-paused] .mio-marquee__pause-icon {
+    display: none;
+  }
+
+  .mio-marquee[data-mio-marquee-paused] .mio-marquee__play-icon {
+    display: block;
+  }
+
+  .mio-marquee__group {
+    gap: 0;
+    padding-inline-end: 0;
+  }
+
+  .mio-marquee__item {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    padding-inline: 14px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  .mio-marquee__sep {
+    display: inline-flex;
+    opacity: 0.55;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mio-marquee__pause {
+      display: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Mio · Cinta de valor",
+  "class": "mio-marquee-wrapper",
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer"
+    ]
+  },
+  "settings": [
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Esquema de color",
+      "default": "scheme-5"
+    },
+    {
+      "type": "range",
+      "id": "speed",
+      "label": "Duración del recorrido",
+      "min": 12,
+      "max": 80,
+      "step": 2,
+      "unit": "s",
+      "default": 34
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Arriba",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Abajo",
+      "min": 0,
+      "max": 40,
+      "step": 2,
+      "unit": "px",
+      "default": 0
+    }
+  ],
+  "blocks": [
+    {
+      "type": "mio_marquee_item",
+      "name": "Mensaje",
+      "limit": 8,
+      "settings": [
+        {
+          "type": "text",
+          "id": "text",
+          "label": "Texto",
+          "default": "Pago contra entrega"
+        },
+        {
+          "type": "select",
+          "id": "icon",
+          "label": "Icono",
+          "options": [
+            {
+              "value": "none",
+              "label": "Sin icono"
+            },
+            {
+              "value": "cash",
+              "label": "Contra entrega"
+            },
+            {
+              "value": "truck",
+              "label": "Envío"
+            },
+            {
+              "value": "shield",
+              "label": "Garantía"
+            },
+            {
+              "value": "spark",
+              "label": "Novedad"
+            },
+            {
+              "value": "return",
+              "label": "Devoluciones"
+            },
+            {
+              "value": "whatsapp",
+              "label": "WhatsApp"
+            }
+          ],
+          "default": "none"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Mio · Cinta de valor",
+      "category": "Mio Store",
+      "blocks": {
+        "item_1": {
+          "type": "mio_marquee_item",
+          "settings": {
+            "text": "Pago contra entrega",
+            "icon": "cash"
+          }
+        },
+        "item_2": {
+          "type": "mio_marquee_item",
+          "settings": {
+            "text": "Envío a todo Colombia",
+            "icon": "truck"
+          }
+        },
+        "item_3": {
+          "type": "mio_marquee_item",
+          "settings": {
+            "text": "Garantía de 30 días",
+            "icon": "shield"
+          }
+        },
+        "item_4": {
+          "type": "mio_marquee_item",
+          "settings": {
+            "text": "Atención por WhatsApp",
+            "icon": "whatsapp"
+          }
+        }
+      },
+      "block_order": [
+        "item_1",
+        "item_2",
+        "item_3",
+        "item_4"
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,486 @@
+{%- liquid
+  assign columns = section.blocks.size | at_most: 3
+  if columns == 0
+    assign columns = 3
+  endif
+-%}
+
+<div class="section-background color-{{ section.settings.color_scheme }}"></div>
+
+<section
+  class="mio-collections section section--{{ section.settings.section_width }} color-{{ section.settings.color_scheme }} spacing-style"
+  style="{% render 'spacing-style', settings: section.settings %} --mio-collections-cols: {{ columns }};"
+>
+  {%- if section.settings.heading != blank or section.settings.subheading != blank -%}
+    <header class="mio-collections__header" data-mio-reveal>
+      <div>
+        {%- if section.settings.eyebrow != blank -%}
+          <p class="mio-collections__eyebrow">{{ section.settings.eyebrow }}</p>
+        {%- endif -%}
+        {%- if section.settings.heading != blank -%}
+          <h2 class="mio-collections__title">{{ section.settings.heading }}</h2>
+        {%- endif -%}
+        {%- if section.settings.subheading != blank -%}
+          <p class="mio-collections__subheading">{{ section.settings.subheading }}</p>
+        {%- endif -%}
+      </div>
+
+      {%- if section.settings.link_label != blank and section.settings.link != blank -%}
+        <a class="mio-collections__all" href="{{ section.settings.link }}">
+          {{ section.settings.link_label }}
+          <span aria-hidden="true">{{- 'icon-arrow.svg' | inline_asset_content -}}</span>
+        </a>
+      {%- endif -%}
+    </header>
+  {%- endif -%}
+
+  <div class="mio-collections__grid" data-mio-stagger="90">
+    {%- for block in section.blocks -%}
+      {%- liquid
+        assign collection = block.settings.collection
+        assign card_image = block.settings.image
+        if card_image == blank and collection != blank
+          assign card_image = collection.image
+        endif
+        assign card_title = block.settings.title | default: collection.title
+        assign card_url = collection.url | default: routes.all_products_collection_url
+      -%}
+
+      <a
+        class="mio-collection-card"
+        href="{{ card_url }}"
+        data-mio-reveal
+        {{ block.shopify_attributes }}
+      >
+        <div class="mio-collection-card__media">
+          {%- if card_image != blank -%}
+            {{
+              card_image
+              | image_url: width: 900
+              | image_tag:
+                widths: '300, 450, 600, 750, 900',
+                sizes: '(min-width: 990px) 30vw, (min-width: 750px) 32vw, 78vw',
+                class: 'mio-collection-card__image',
+                loading: 'lazy',
+                alt: card_image.alt
+            }}
+          {%- else -%}
+            <div class="mio-collection-card__placeholder">
+              {{ 'collection-apparel-1' | placeholder_svg_tag }}
+            </div>
+          {%- endif -%}
+
+          <div class="mio-collection-card__scrim" aria-hidden="true"></div>
+
+          {%- if block.settings.badge != blank -%}
+            <span class="mio-collection-card__badge">{{ block.settings.badge }}</span>
+          {%- endif -%}
+
+          <div class="mio-collection-card__content">
+            <span class="mio-collection-card__title">{{ card_title }}</span>
+            {%- if block.settings.subtitle != blank -%}
+              <span class="mio-collection-card__subtitle">{{ block.settings.subtitle }}</span>
+            {%- endif -%}
+          </div>
+
+          <span class="mio-collection-card__arrow" aria-hidden="true">
+            {{- 'icon-arrow.svg' | inline_asset_content -}}
+          </span>
+        </div>
+      </a>
+    {%- endfor -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .mio-collections__header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+    margin-block-end: 24px;
+  }
+
+  .mio-collections__eyebrow {
+    margin: 0 0 6px;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgb(var(--color-foreground-rgb) / 0.55);
+  }
+
+  .mio-collections__title {
+    margin: 0;
+    font-size: clamp(1.75rem, 4.4vw, 2.75rem);
+    line-height: 1.02;
+    letter-spacing: -0.035em;
+  }
+
+  .mio-collections__subheading {
+    margin: 8px 0 0;
+    max-width: 52ch;
+    font-size: 0.9375rem;
+    color: rgb(var(--color-foreground-rgb) / 0.66);
+  }
+
+  .mio-collections__all {
+    display: none;
+    align-items: center;
+    gap: 6px;
+    flex: 0 0 auto;
+    font-size: 0.8125rem;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--color-foreground-heading);
+    border-bottom: 1px solid currentcolor;
+    padding-block-end: 2px;
+  }
+
+  .mio-collections__all span {
+    display: inline-flex;
+    width: 14px;
+    height: 14px;
+    transition: transform 200ms var(--mio-ease-out);
+  }
+
+  .mio-collections__all:hover span {
+    transform: translateX(3px);
+  }
+
+  .mio-collections__grid {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(75vw, 1fr);
+    gap: 12px;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+    margin-inline: calc(var(--page-margin) * -1);
+    padding-inline: var(--page-margin);
+    padding-block-end: 4px;
+  }
+
+  .mio-collections__grid::-webkit-scrollbar {
+    display: none;
+  }
+
+  .mio-collection-card {
+    display: block;
+    scroll-snap-align: start;
+    text-decoration: none;
+    color: inherit;
+  }
+
+  .mio-collection-card__media {
+    position: relative;
+    overflow: hidden;
+    border-radius: 20px;
+    aspect-ratio: 4 / 5;
+    background: rgb(var(--color-foreground-rgb) / 0.06);
+    isolation: isolate;
+  }
+
+  .mio-collection-card__image {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 600ms var(--mio-ease-out);
+  }
+
+  .mio-collection-card__placeholder {
+    position: absolute;
+    inset: 0;
+    color: rgb(255 255 255 / 0.7);
+  }
+
+  .mio-collection-card__scrim {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(to top, rgb(10 10 12 / 0.72) 0%, rgb(10 10 12 / 0.16) 42%, transparent 70%);
+  }
+
+  .mio-collection-card__badge {
+    position: absolute;
+    inset-block-start: 12px;
+    inset-inline-start: 12px;
+    padding: 6px 10px;
+    border-radius: 100px;
+    background: var(--mio-yellow);
+    color: var(--mio-ink);
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .mio-collection-card__content {
+    position: absolute;
+    inset-inline: 16px;
+    inset-block-end: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    color: #fff;
+    padding-inline-end: 48px;
+  }
+
+  .mio-collection-card__title {
+    font-size: 1.125rem;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+
+  .mio-collection-card__subtitle {
+    font-size: 0.75rem;
+    opacity: 0.82;
+  }
+
+  .mio-collection-card__arrow {
+    position: absolute;
+    inset-block-end: 14px;
+    inset-inline-end: 14px;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.16);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    color: #fff;
+    transition:
+      transform 240ms var(--mio-ease-out),
+      background-color 200ms var(--mio-ease-out);
+  }
+
+  .mio-collection-card__arrow svg {
+    width: 16px;
+    height: 16px;
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    .mio-collection-card:hover .mio-collection-card__image {
+      transform: scale(1.045);
+    }
+
+    .mio-collection-card:hover .mio-collection-card__arrow {
+      transform: translate(2px, -2px);
+      background: var(--mio-yellow);
+      color: var(--mio-ink);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .mio-collection-card__image,
+    .mio-collection-card__arrow {
+      transition: none;
+    }
+
+    .mio-collection-card:hover .mio-collection-card__image {
+      transform: none;
+    }
+  }
+
+  @media screen and (min-width: 750px) {
+    .mio-collections__grid {
+      grid-auto-flow: initial;
+      grid-template-columns: repeat(var(--mio-collections-cols, 3), minmax(0, 1fr));
+      gap: 16px;
+      overflow: visible;
+      margin-inline: 0;
+      padding-inline: 0;
+    }
+
+    .mio-collections__all {
+      display: inline-flex;
+    }
+
+    .mio-collection-card__media {
+      aspect-ratio: 3 / 4;
+    }
+  }
+
+  @media screen and (min-width: 990px) {
+    .mio-collections__grid {
+      gap: 20px;
+    }
+
+    .mio-collection-card__content {
+      inset-inline: 20px;
+      inset-block-end: 20px;
+    }
+
+    .mio-collection-card__title {
+      font-size: 1.25rem;
+    }
+
+    .mio-collection-card__arrow {
+      inset-block-end: 18px;
+      inset-inline-end: 18px;
+      width: 38px;
+      height: 38px;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Mio · Colecciones",
+  "class": "mio-collections-wrapper",
+  "disabled_on": {
+    "groups": [
+      "header",
+      "footer"
+    ]
+  },
+  "settings": [
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Antetítulo",
+      "default": "Explora por categoría"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Título",
+      "default": "Encuentra tu próximo favorito"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subtítulo",
+      "default": "Selecciones pensadas para tu día a día, con envío a todo el país."
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Texto del enlace",
+      "default": "Ver todo"
+    },
+    {
+      "type": "url",
+      "id": "link",
+      "label": "Enlace"
+    },
+    {
+      "type": "color_scheme",
+      "id": "color_scheme",
+      "label": "Esquema de color",
+      "default": "scheme-1"
+    },
+    {
+      "type": "select",
+      "id": "section_width",
+      "label": "Ancho",
+      "options": [
+        {
+          "value": "page-width",
+          "label": "Página"
+        },
+        {
+          "value": "full-width",
+          "label": "Completo"
+        }
+      ],
+      "default": "page-width"
+    },
+    {
+      "type": "header",
+      "content": "Espaciado"
+    },
+    {
+      "type": "range",
+      "id": "padding-block-start",
+      "label": "Arriba",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 56
+    },
+    {
+      "type": "range",
+      "id": "padding-block-end",
+      "label": "Abajo",
+      "min": 0,
+      "max": 120,
+      "step": 4,
+      "unit": "px",
+      "default": 24
+    }
+  ],
+  "blocks": [
+    {
+      "type": "mio_collection",
+      "name": "Colección",
+      "limit": 3,
+      "settings": [
+        {
+          "type": "collection",
+          "id": "collection",
+          "label": "Colección"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Imagen (opcional)",
+          "info": "Si la dejas vacía se usa la imagen de la colección."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Título visible"
+        },
+        {
+          "type": "text",
+          "id": "subtitle",
+          "label": "Subtítulo",
+          "default": "Ver productos"
+        },
+        {
+          "type": "text",
+          "id": "badge",
+          "label": "Insignia"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Mio · Colecciones",
+      "category": "Mio Store",
+      "blocks": {
+        "c1": {
+          "type": "mio_collection",
+          "settings": {
+            "subtitle": "Ver productos",
+            "badge": "Más vendido"
+          }
+        },
+        "c2": {
+          "type": "mio_collection",
+          "settings": {
+            "subtitle": "Ver productos"
+          }
+        },
+        "c3": {
+          "type": "mio_collection",
+          "settings": {
+            "subtitle": "Ver productos"
+          }
+        }
+      },
+      "block_order": [
+        "c1",
+        "c2",
+        "c3"
+      ]
+    }
+  ]
+}
+{% endschema %}
